@@ -1,0 +1,806 @@
+/* ABOUTME: Reusable component classes with variants for Duke Law Dashboard */
+/* ABOUTME: Uses CSS variables for consistent theming across all components */
+/* ENHANCED: Added Memphis-style components with bold outlines and aesthetic elements */
+
+/* ========================================
+   MEMPHIS DESIGN SYSTEM VARIABLES
+======================================== */
+
+:root {
+  /* Memphis-style bold outline colors */
+  --color-outline-bold: #000000;
+  --color-outline-medium: #333333;
+  --color-outline-light: #666666;
+  
+  /* Memphis palette - bright, saturated colors */
+  --color-memphis-pink: #FF6B9D;
+  --color-memphis-purple: #9B59B6;
+  --color-memphis-blue: #3498DB;
+  --color-memphis-turquoise: #1ABC9C;
+  --color-memphis-green: #2ECC71;
+  --color-memphis-yellow: #F1C40F;
+  --color-memphis-orange: #E67E22;
+  --color-memphis-red: #E74C3C;
+  --color-memphis-coral: #FF7675;
+  --color-memphis-lavender: #A29BFE;
+  
+  /* Bold stroke widths */
+  --stroke-thin: 2px;
+  --stroke-medium: 3px;
+  --stroke-thick: 4px;
+  --stroke-extra-thick: 6px;
+  
+  /* Memphis shapes and patterns */
+  --pattern-dots: "data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='smallGrid' width='20' height='20' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='%23000' stroke-width='1'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23smallGrid)' /%3E%3C/svg%3E";
+  
+  /* Playful animations timing */
+  --animation-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ========================================
+   MEMPHIS-STYLE TIMER COMPONENT
+======================================== */
+
+.timer-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl);
+  background: linear-gradient(135deg, var(--color-memphis-pink), var(--color-memphis-purple));
+  border: var(--stroke-thick) solid var(--color-outline-bold);
+  border-radius: var(--radius-2xl);
+  box-shadow: 
+    8px 8px 0px var(--color-outline-bold),
+    var(--shadow-xl);
+  min-height: 300px;
+  overflow: hidden;
+}
+
+.timer-vinyl-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xl);
+}
+
+/* Spinning vinyl record */
+.vinyl-record {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #1a1a1a 20%, #333 25%, #1a1a1a 30%, #333 35%);
+  border: var(--stroke-thick) solid var(--color-outline-bold);
+  border-radius: 50%;
+  animation: spin-vinyl 3s linear infinite;
+  box-shadow: 
+    4px 4px 0px var(--color-outline-bold),
+    inset 0 0 20px rgba(0,0,0,0.3);
+}
+
+.vinyl-record::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-memphis-red);
+  border: var(--stroke-medium) solid var(--color-outline-bold);
+  border-radius: 50%;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.3);
+}
+
+.vinyl-record::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-outline-bold);
+  border-radius: 50%;
+}
+
+/* Cassette tape elements */
+.cassette-reels {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.cassette-reel {
+  width: 30px;
+  height: 30px;
+  background-color: var(--color-memphis-yellow);
+  border: var(--stroke-medium) solid var(--color-outline-bold);
+  border-radius: 50%;
+  animation: spin-cassette 2s linear infinite reverse;
+  position: relative;
+}
+
+.cassette-reel::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: repeating-conic-gradient(
+    from 0deg,
+    var(--color-outline-bold) 0deg 30deg,
+    transparent 30deg 60deg
+  );
+  border-radius: 50%;
+}
+
+/* Timer display */
+.timer-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  background-color: var(--color-surface);
+  padding: var(--space-xl);
+  border: var(--stroke-thick) solid var(--color-outline-bold);
+  border-radius: var(--radius-xl);
+  box-shadow: 4px 4px 0px var(--color-outline-bold);
+  position: relative;
+}
+
+.timer-numbers {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.time-value {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-text-primary);
+  text-shadow: 
+    2px 2px 0px var(--color-outline-bold),
+    -2px -2px 0px var(--color-outline-bold),
+    2px -2px 0px var(--color-outline-bold),
+    -2px 2px 0px var(--color-outline-bold);
+  background: linear-gradient(45deg, var(--color-memphis-blue), var(--color-memphis-turquoise));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.time-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.time-separator {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-memphis-orange);
+  text-shadow: 2px 2px 0px var(--color-outline-bold);
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+/* Timer controls */
+.timer-controls {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+
+.timer-btn {
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  background-color: var(--color-memphis-green);
+  color: var(--color-text-inverse);
+  border: var(--stroke-thick) solid var(--color-outline-bold);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s var(--animation-bounce);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  box-shadow: 4px 4px 0px var(--color-outline-bold);
+}
+
+.timer-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px var(--color-outline-bold);
+}
+
+.timer-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px var(--color-outline-bold);
+}
+
+.timer-btn-stop {
+  background-color: var(--color-memphis-red);
+}
+
+.timer-btn-pause {
+  background-color: var(--color-memphis-yellow);
+  color: var(--color-text-primary);
+}
+
+/* ========================================
+   MEMPHIS-STYLE CALENDAR COMPONENT
+======================================== */
+
+.calendar-container {
+  background: linear-gradient(135deg, var(--color-memphis-coral), var(--color-memphis-lavender));
+  border: var(--stroke-thick) solid var(--color-outline-bold);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-xl);
+  box-shadow: 
+    8px 8px 0px var(--color-outline-bold),
+    var(--shadow-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.calendar-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(90deg, 
+    var(--color-memphis-pink) 0%, 
+    var(--color-memphis-orange) 25%, 
+    var(--color-memphis-yellow) 50%, 
+    var(--color-memphis-green) 75%, 
+    var(--color-memphis-blue) 100%);
+  border-bottom: var(--stroke-thick) solid var(--color-outline-bold);
+}
+
+.calendar-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) 0;
+  margin-bottom: var(--space-lg);
+}
+
+.calendar-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-text-inverse);
+  text-shadow: 
+    2px 2px 0px var(--color-outline-bold),
+    -1px -1px 0px var(--color-outline-bold),
+    1px -1px 0px var(--color-outline-bold),
+    -1px 1px 0px var(--color-outline-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.calendar-nav {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.calendar-nav-btn {
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border: var(--stroke-medium) solid var(--color-outline-bold);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  transition: all 0.2s var(--animation-bounce);
+  box-shadow: 3px 3px 0px var(--color-outline-bold);
+}
+
+.calendar-nav-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px var(--color-outline-bold);
+}
+
+.calendar-grid {
+  background-color: var(--color-surface);
+  border: var(--stroke-thick) solid var(--color-outline-bold);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: inset 0 0 0 var(--stroke-medium) var(--color-outline-bold);
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.weekday-label {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  padding: var(--space-sm);
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-xs);
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  border: var(--stroke-thin) solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s var(--animation-elastic);
+  position: relative;
+}
+
+.calendar-day:hover {
+  background-color: var(--color-memphis-yellow);
+  border-color: var(--color-outline-bold);
+  transform: scale(1.1);
+  box-shadow: 2px 2px 0px var(--color-outline-bold);
+}
+
+.calendar-day.today {
+  background: linear-gradient(135deg, var(--color-memphis-pink), var(--color-memphis-purple));
+  color: var(--color-text-inverse);
+  border-color: var(--color-outline-bold);
+  border-width: var(--stroke-medium);
+  font-weight: var(--font-weight-bold);
+  text-shadow: 1px 1px 0px var(--color-outline-bold);
+}
+
+.calendar-day.has-events::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-memphis-red);
+  border: 1px solid var(--color-outline-bold);
+  border-radius: 50%;
+}
+
+.calendar-day.other-month {
+  opacity: 0.3;
+}
+
+/* Hourly schedule */
+.hourly-schedule {
+  margin-top: var(--space-xl);
+  background-color: var(--color-surface);
+  border: var(--stroke-thick) solid var(--color-outline-bold);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: 4px 4px 0px var(--color-outline-bold);
+}
+
+.schedule-header {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.hourly-grid {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: var(--space-sm);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.hour-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  padding: var(--space-sm);
+  text-align: right;
+  border-right: var(--stroke-thin) solid var(--color-border);
+}
+
+.hour-slot {
+  min-height: 40px;
+  padding: var(--space-sm);
+  background-color: var(--color-surface-alt);
+  border: var(--stroke-thin) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.hour-slot:hover {
+  background-color: var(--color-memphis-yellow);
+  border-color: var(--color-outline-bold);
+  transform: translateX(2px);
+}
+
+.hour-slot.has-event {
+  background: linear-gradient(90deg, var(--color-memphis-blue), var(--color-memphis-turquoise));
+  color: var(--color-text-inverse);
+  border-color: var(--color-outline-bold);
+  border-width: var(--stroke-medium);
+}
+
+/* ========================================
+   MEMPHIS-STYLE CHARTS COMPONENT
+======================================== */
+
+.chart-container {
+  background: linear-gradient(135deg, var(--color-memphis-turquoise), var(--color-memphis-blue));
+  border: var(--stroke-thick) solid var(--color-outline-bold);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-xl);
+  box-shadow: 
+    8px 8px 0px var(--color-outline-bold),
+    var(--shadow-xl);
+  position: relative;
+}
+
+.chart-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.chart-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-text-inverse);
+  text-shadow: 
+    2px 2px 0px var(--color-outline-bold),
+    -1px -1px 0px var(--color-outline-bold),
+    1px -1px 0px var(--color-outline-bold),
+    -1px 1px 0px var(--color-outline-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.chart-content {
+  background-color: var(--color-surface);
+  border: var(--stroke-thick) solid var(--color-outline-bold);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: inset 0 0 0 var(--stroke-medium) var(--color-outline-bold);
+  position: relative;
+}
+
+/* Bar chart styles */
+.bar-chart {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  height: 200px;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border-bottom: var(--stroke-thick) solid var(--color-outline-bold);
+  border-left: var(--stroke-thick) solid var(--color-outline-bold);
+  position: relative;
+}
+
+.chart-bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--color-memphis-pink), var(--color-memphis-purple));
+  border: var(--stroke-medium) solid var(--color-outline-bold);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s var(--animation-elastic);
+  box-shadow: 2px 0px 0px var(--color-outline-bold);
+}
+
+.chart-bar:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow: 
+    4px 4px 0px var(--color-outline-bold),
+    var(--shadow-lg);
+}
+
+.chart-bar::after {
+  content: attr(data-value);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  background-color: var(--color-memphis-yellow);
+  border: var(--stroke-thin) solid var(--color-outline-bold);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chart-bar:hover::after {
+  opacity: 1;
+}
+
+/* Different bar colors */
+.chart-bar:nth-child(1) { background: linear-gradient(to top, var(--color-memphis-red), var(--color-memphis-coral)); }
+.chart-bar:nth-child(2) { background: linear-gradient(to top, var(--color-memphis-orange), var(--color-memphis-yellow)); }
+.chart-bar:nth-child(3) { background: linear-gradient(to top, var(--color-memphis-green), var(--color-memphis-turquoise)); }
+.chart-bar:nth-child(4) { background: linear-gradient(to top, var(--color-memphis-blue), var(--color-memphis-purple)); }
+.chart-bar:nth-child(5) { background: linear-gradient(to top, var(--color-memphis-purple), var(--color-memphis-lavender)); }
+
+/* Line chart overlay */
+.line-chart-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.chart-line {
+  stroke: var(--color-outline-bold);
+  stroke-width: var(--stroke-thick);
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(2px 2px 0px var(--color-memphis-yellow));
+}
+
+.chart-point {
+  fill: var(--color-memphis-yellow);
+  stroke: var(--color-outline-bold);
+  stroke-width: var(--stroke-medium);
+  r: 6;
+  transition: all 0.3s ease;
+}
+
+.chart-point:hover {
+  r: 8;
+  fill: var(--color-memphis-red);
+}
+
+/* Chart labels */
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-md);
+  padding: 0 var(--space-lg);
+}
+
+.chart-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  text-align: center;
+}
+
+/* Chart legend */
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-surface);
+  border: var(--stroke-medium) solid var(--color-outline-bold);
+  border-radius: var(--radius-lg);
+  box-shadow: 2px 2px 0px var(--color-outline-bold);
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border: var(--stroke-thin) solid var(--color-outline-bold);
+  border-radius: var(--radius-sm);
+}
+
+.legend-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+
+@keyframes spin-vinyl {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spin-cassette {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(2deg); }
+  75% { transform: rotate(-2deg); }
+}
+
+.wiggle:hover {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+/* ========================================
+   ORIGINAL BUTTON COMPONENTS (keeping existing)
+======================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition-all);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Button sizes */
+.btn-sm {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-xs);
+}
+
+.btn-lg {
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--font-size-base);
+}
+
+.btn-xl {
+  padding: var(--space-lg) var(--space-2xl);
+  font-size: var(--font-size-lg);
+}
+
+/* Button variants */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-primary:active:not(:disabled) {
+  background-color: var(--color-primary-active);
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-secondary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-secondary-hover);
+  border-color: var(--color-secondary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  border-color: transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: var(--color-text-inverse);
+  border-color: var(--color-success);
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: var(--color-success-hover);
+  border-color: var(--color-success-hover);
+}
+
+.btn-error {
+  background-color: var(--color-error);
+  color: var(--color-text-inverse);
+  border-color: var(--color-error);
+}
+
+.btn-error:hover:not(:disabled) {
+  background-color: var(--color-error-hover);
+  border-color: var(--color-error-hover);
+}
+
+.btn-warning {
+  background-color: var(--color-warning);
+  color: var(--color-text-inverse);
+  border-color: var(--color-warning);
+}
+
+.btn-warning:hover:not(:disabled) {
+  background-color: var(--color-warning-hover);
+  border-color: var(--color-warning-hover);
+}
