@@ -15,11 +15,38 @@ const databaseRoutes = require('./routes/database');
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-// Security middleware
-app.use(helmet());
+// Security middleware with iframe-friendly configuration
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'self'"],
+    }
+  },
+  // Allow iframe embedding for widget pages
+  frameOptions: false
+}));
+
+// CORS configuration for widget embedding
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    // Allow Notion domains for iframe embedding
+    'https://www.notion.so',
+    'https://notion.so',
+    // Allow localhost for development
+    /^http:\/\/localhost:\d+$/
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'session-id']
 }));
 
 // Rate limiting
@@ -40,7 +67,10 @@ app.get('/api/health', (req, res) => {
     status: 'ok', 
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    version: '1.0.0',
+    build_commit: process.env.VERCEL_GIT_COMMIT_SHA || 'local',
+    deployed_at: process.env.VERCEL_DEPLOYMENT_URL || `http://localhost:${PORT}`
   });
 });
 

@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react';
 import { QuickTask, TimerState } from '../types/index.ts';
 import { timerApi } from '../services/api.ts';
 import { formatDuration } from '../utils/time.ts';
-import { useTheme } from '../contexts/ThemeContext.tsx';
 import { 
   EnvelopeIcon, 
   DocumentTextIcon, 
@@ -34,7 +33,6 @@ const taskIcons: Record<string, React.ComponentType<any>> = {
 };
 
 export const QuickTasks: React.FC<QuickTasksProps> = ({ timerState, onTimerUpdate }) => {
-  const { themeConfig } = useTheme();
   const [quickTasks, setQuickTasks] = useState<QuickTask[]>([]);
   const [loading, setLoading] = useState<string>(''); // Track which task is loading
   const [error, setError] = useState<string>('');

@@ -1,7 +1,7 @@
 // ABOUTME: Active task timer component with start/stop functionality
 // ABOUTME: Displays current timer status and creates Notion time tracking entries
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Task, TimerState } from '../types/index.ts';
 import { timerApi, tasksApi } from '../services/api.ts';
 import { formatDuration } from '../utils/time.ts';
@@ -21,11 +21,20 @@ export const Timer: React.FC<TimerProps> = ({ onTimerUpdate }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
+  const fetchTimerStatus = useCallback(async () => {
+    try {
+      const status = await timerApi.getStatus();
+      setTimerState(status);
+    } catch (err) {
+      console.error('Failed to fetch timer status:', err);
+    }
+  }, [setTimerState]);
+
   // Fetch timer status and tasks on component mount
   useEffect(() => {
     fetchTimerStatus();
     fetchTasks();
-  }, []);
+  }, [fetchTimerStatus]);
 
   // Update timer display every second when running
   useEffect(() => {
@@ -40,7 +49,7 @@ export const Timer: React.FC<TimerProps> = ({ onTimerUpdate }) => {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [timerState.isRunning]);
+  }, [timerState.isRunning, fetchTimerStatus]);
 
   // Notify parent of timer updates
   useEffect(() => {
@@ -48,15 +57,6 @@ export const Timer: React.FC<TimerProps> = ({ onTimerUpdate }) => {
       onTimerUpdate(timerState);
     }
   }, [timerState, onTimerUpdate]);
-
-  const fetchTimerStatus = async () => {
-    try {
-      const status = await timerApi.getStatus();
-      setTimerState(status);
-    } catch (err) {
-      console.error('Failed to fetch timer status:', err);
-    }
-  };
 
   const fetchTasks = async () => {
     try {
@@ -75,7 +75,7 @@ export const Timer: React.FC<TimerProps> = ({ onTimerUpdate }) => {
     }
   };
 
-  const startTimer = async () => {
+  const startTimer = useCallback(async () => {
     if (!selectedTaskId && !customTaskName.trim()) {
       setError('Please select a task or enter a custom task name');
       return;
@@ -100,9 +100,9 @@ export const Timer: React.FC<TimerProps> = ({ onTimerUpdate }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedTaskId, customTaskName, fetchTimerStatus, tasks]);
 
-  const stopTimer = async () => {
+  const stopTimer = useCallback(async () => {
     setLoading(true);
     setError('');
 
@@ -114,7 +114,7 @@ export const Timer: React.FC<TimerProps> = ({ onTimerUpdate }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchTimerStatus]);
 
 
   // Add global keyboard listener

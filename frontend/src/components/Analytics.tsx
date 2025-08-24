@@ -1,7 +1,7 @@
 // ABOUTME: Analytics dashboard component displaying reading speed and time distribution
 // ABOUTME: Uses Chart.js to visualize productivity metrics and insights
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -40,11 +40,7 @@ export const Analytics: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [timeframe, setTimeframe] = useState<string>('7');
 
-  useEffect(() => {
-    fetchAnalytics();
-  }, [timeframe]);
-
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     setLoading(true);
     setError('');
 
@@ -64,7 +60,11 @@ export const Analytics: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeframe]);
+
+  useEffect(() => {
+    fetchAnalytics();
+  }, [fetchAnalytics]);
 
   // Chart configurations
   const readingSpeedChartData = {

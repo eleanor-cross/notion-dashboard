@@ -4,8 +4,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import App from './App.tsx';
-import { ThemeProvider } from './contexts/ThemeContext.tsx';
+import { AppRouter } from './Router.tsx';
 
 const container = document.getElementById('root');
 if (!container) {
@@ -15,8 +14,6 @@ if (!container) {
 const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
+    <AppRouter />
   </React.StrictMode>
 );

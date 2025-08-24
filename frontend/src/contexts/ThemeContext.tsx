@@ -221,7 +221,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   // Apply initial theme on mount
   useEffect(() => {
     applyThemeToDocument(currentTheme);
-  }, []);
+  }, [currentTheme]);
 
   // Prepare context value
   const contextValue: ThemeContextType = {

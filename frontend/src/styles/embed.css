@@ -1,0 +1,153 @@
+/* ABOUTME: Styles for embedded widgets optimized for iframe embedding */
+/* ABOUTME: Ensures widgets display properly in Notion and other platforms */
+
+/* Base iframe optimization */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Embedded widget container */
+.embed-container {
+  min-height: 300px;
+  max-height: 800px;
+  overflow-y: auto;
+  background: #f9fafb;
+}
+
+/* Remove excessive margins for embedded view */
+.embed-widget {
+  margin: 0 !important;
+  padding: 8px !important;
+}
+
+/* Compact spacing for embedded widgets */
+.embed-widget .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 12px !important;
+}
+
+.embed-widget .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 16px !important;
+}
+
+/* Responsive adjustments for small iframe sizes */
+@media (max-width: 480px) {
+  .embed-widget {
+    padding: 4px !important;
+  }
+  
+  .embed-widget .text-xl {
+    font-size: 1.125rem !important;
+  }
+  
+  .embed-widget .text-lg {
+    font-size: 1rem !important;
+  }
+  
+  .embed-widget .grid-cols-2 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Hide overflow for clean iframe display */
+.embed-widget {
+  border-radius: 8px;
+  box-shadow: none !important;
+  border: 1px solid #e5e7eb;
+}
+
+/* Optimize buttons and interactive elements for embedding */
+.embed-widget button {
+  transition: all 0.15s ease-in-out;
+}
+
+.embed-widget button:hover {
+  transform: translateY(-1px);
+}
+
+/* Ensure proper scrolling behavior in iframes */
+.embed-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.embed-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.embed-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.embed-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Attribution link styling */
+.embed-attribution {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border-top: 1px solid #e5e7eb;
+  backdrop-filter: blur(4px);
+}
+
+.embed-attribution a {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.embed-attribution a:hover {
+  color: #374151;
+  text-decoration: underline;
+}
+
+/* Notion-specific optimizations */
+@media (max-width: 600px) {
+  /* Notion mobile optimization */
+  .embed-widget .grid {
+    gap: 12px !important;
+  }
+  
+  .embed-widget .p-6 {
+    padding: 16px !important;
+  }
+  
+  .embed-widget .p-4 {
+    padding: 12px !important;
+  }
+}
+
+/* Print styles for embedded widgets */
+@media print {
+  .embed-container {
+    background: white !important;
+    box-shadow: none !important;
+  }
+  
+  .embed-attribution {
+    display: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .embed-widget {
+    border: 2px solid #000 !important;
+  }
+  
+  .embed-widget button {
+    border: 1px solid #000 !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .embed-widget * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

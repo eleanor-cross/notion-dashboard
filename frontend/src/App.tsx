@@ -7,6 +7,7 @@ import { QuickTasks } from './components/QuickTasks.tsx';
 import { ReadingTracker } from './components/ReadingTracker.tsx';
 import { Analytics } from './components/Analytics.tsx';
 import { DatabaseConfigModal } from './components/DatabaseConfigModal.tsx';
+import { WidgetContainer } from './components/WidgetContainer.tsx';
 import { TimerState } from './types/index.ts';
 import { healthApi } from './services/api.ts';
 
@@ -225,19 +226,25 @@ function App() {
             {/* Timer and Quick Tasks Row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
-                <Timer onTimerUpdate={setTimerState} />
+                <WidgetContainer widgetType="timer" widgetName="Study Timer">
+                  <Timer onTimerUpdate={setTimerState} />
+                </WidgetContainer>
               </div>
               <div>
-                <QuickTasks 
-                  timerState={timerState} 
-                  onTimerUpdate={handleTimerUpdate}
-                />
+                <WidgetContainer widgetType="quick-tasks" widgetName="Quick Tasks">
+                  <QuickTasks 
+                    timerState={timerState} 
+                    onTimerUpdate={handleTimerUpdate}
+                  />
+                </WidgetContainer>
               </div>
             </div>
 
             {/* Reading Tracker */}
             <div className="grid grid-cols-1">
-              <ReadingTracker />
+              <WidgetContainer widgetType="reading" widgetName="Reading Tracker">
+                <ReadingTracker />
+              </WidgetContainer>
             </div>
 
             {/* Current Session Summary */}
@@ -268,7 +275,9 @@ function App() {
             )}
           </div>
         ) : (
-          <Analytics />
+          <WidgetContainer widgetType="analytics" widgetName="Study Analytics">
+            <Analytics />
+          </WidgetContainer>
         )}
       </main>
 
