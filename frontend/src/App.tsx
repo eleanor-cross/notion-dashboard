@@ -53,21 +53,48 @@ function App() {
     }
   };
 
-  const saveDatabaseConfig = (config: typeof databaseConfig) => {
+  const saveDatabaseConfig = (config: typeof databaseConfig & { token?: string }) => {
     try {
       if (config) {
-        localStorage.setItem('notionDatabaseConfig', JSON.stringify(config));
-        setDatabaseConfig(config);
+        // Separate token from database URLs
+        const { token, ...databaseUrls } = config;
         
-        // Notify backend of new configuration
+        // Only store database URLs in localStorage (not the token for security)
+        localStorage.setItem('notionDatabaseConfig', JSON.stringify(databaseUrls));
+        setDatabaseConfig(databaseUrls);
+        
+        // Send full configuration including token to backend
         fetch('/api/database/configure', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(config)
-        }).catch(err => console.error('Failed to update backend config:', err));
+          headers: { 
+            'Content-Type': 'application/json',
+            'session-id': sessionStorage.getItem('dashboardSessionId') || ''
+          },
+          body: JSON.stringify(config) // Include token in backend request
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.success) {
+            console.log('Configuration saved successfully:', {
+              databases: result.validDatabases,
+              tokenConfigured: result.tokenConfigured
+            });
+            
+            // Show success message
+            alert(`Configuration saved successfully!\n${result.tokenConfigured ? '✅ Token configured' : ''}\n📊 Databases: ${result.validDatabases.join(', ')}`);
+          } else {
+            console.error('Configuration save failed:', result.error);
+            alert(`Failed to save configuration: ${result.error}`);
+          }
+        })
+        .catch(err => {
+          console.error('Failed to update backend config:', err);
+          alert('Failed to save configuration. Please check your connection.');
+        });
       }
     } catch (error) {
       console.error('Failed to save database config:', error);
+      alert('An error occurred while saving the configuration.');
     }
   };
 

@@ -11,11 +11,12 @@ interface DatabaseConfig {
   schedule: string;
 }
 
+
 interface DatabaseConfigModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (config: DatabaseConfig) => void;
-  currentConfig?: DatabaseConfig;
+  onSave: (config: DatabaseConfig & { token?: string }) => void;
+  currentConfig?: DatabaseConfig & { token?: string };
 }
 
 const DATABASE_TYPES = {
@@ -47,24 +48,27 @@ export const DatabaseConfigModal: React.FC<DatabaseConfigModalProps> = ({
   onSave,
   currentConfig
 }) => {
-  const [config, setConfig] = useState<DatabaseConfig>({
+  const [config, setConfig] = useState<DatabaseConfig & { token?: string }>({
     tasks: '',
     textbooks: '',
     timeTracking: '',
-    schedule: ''
+    schedule: '',
+    token: ''
   });
   
-  const [validation, setValidation] = useState<Record<keyof DatabaseConfig, {
+  const [validation, setValidation] = useState<Record<keyof DatabaseConfig | 'token', {
     isValid: boolean;
     message: string;
   }>>({
     tasks: { isValid: false, message: '' },
     textbooks: { isValid: false, message: '' },
     timeTracking: { isValid: false, message: '' },
-    schedule: { isValid: false, message: '' }
+    schedule: { isValid: false, message: '' },
+    token: { isValid: false, message: '' }
   });
 
   const [isValidating, setIsValidating] = useState(false);
+  const [isValidatingToken, setIsValidatingToken] = useState(false);
 
   useEffect(() => {
     if (currentConfig) {
@@ -91,6 +95,29 @@ export const DatabaseConfigModal: React.FC<DatabaseConfigModalProps> = ({
     return { isValid: true, message: 'Valid Notion URL format' };
   };
 
+  const validateNotionToken = (token: string): { isValid: boolean; message: string } => {
+    if (!token.trim()) {
+      return { isValid: false, message: 'Token is required' };
+    }
+
+    // Basic Notion token validation
+    if (!token.startsWith('secret_')) {
+      return { 
+        isValid: false, 
+        message: 'Invalid token format. Notion integration tokens start with "secret_"' 
+      };
+    }
+
+    if (token.length < 50) {
+      return { 
+        isValid: false, 
+        message: 'Token appears too short. Please check your Notion integration token.' 
+      };
+    }
+
+    return { isValid: true, message: 'Token format looks valid' };
+  };
+
   const handleUrlChange = (type: keyof DatabaseConfig, url: string) => {
     setConfig(prev => ({ ...prev, [type]: url }));
     
@@ -102,6 +129,58 @@ export const DatabaseConfigModal: React.FC<DatabaseConfigModalProps> = ({
     }));
   };
 
+  const handleTokenChange = (token: string) => {
+    setConfig(prev => ({ ...prev, token }));
+    
+    // Validate token format
+    const tokenValidation = validateNotionToken(token);
+    setValidation(prev => ({
+      ...prev,
+      token: tokenValidation
+    }));
+  };
+
+  const validateTokenWithServer = async () => {
+    if (!config.token || !validation.token.isValid) {
+      return;
+    }
+
+    setIsValidatingToken(true);
+    
+    try {
+      const response = await fetch('/api/database/validate-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: config.token })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success && result.validation) {
+        setValidation(prev => ({
+          ...prev,
+          token: {
+            isValid: result.validation.isValid,
+            message: result.validation.isValid 
+              ? `Valid token with access to ${result.validation.databaseCount} databases`
+              : result.validation.error || 'Token validation failed'
+          }
+        }));
+      }
+    } catch (error) {
+      console.error('Token validation failed:', error);
+      setValidation(prev => ({
+        ...prev,
+        token: {
+          isValid: false,
+          message: 'Failed to validate token with server'
+        }
+      }));
+    } finally {
+      setIsValidatingToken(false);
+    }
+  };
+
   const testDatabaseConnections = async () => {
     setIsValidating(true);
     
@@ -109,11 +188,11 @@ export const DatabaseConfigModal: React.FC<DatabaseConfigModalProps> = ({
       // Test each database URL by attempting to connect
       for (const [type, url] of Object.entries(config)) {
         if (url.trim()) {
-          // This will be implemented in the backend
+          // Include token in database testing
           const response = await fetch('/api/database/test', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url, type })
+            body: JSON.stringify({ url, type, token: config.token })
           });
           
           const result = await response.json();
@@ -135,11 +214,19 @@ export const DatabaseConfigModal: React.FC<DatabaseConfigModalProps> = ({
   };
 
   const handleSave = () => {
+    // Check if token is provided (now required)
+    if (!config.token || !validation.token.isValid) {
+      alert('Please provide a valid Notion integration token');
+      return;
+    }
+
     // Check if at least one database is configured
-    const hasValidConfig = Object.values(config).some(url => url.trim() !== '');
+    const hasValidDatabase = Object.entries(config)
+      .filter(([key]) => key !== 'token')
+      .some(([, url]) => url && url.trim() !== '');
     
-    if (!hasValidConfig) {
-      alert('Please configure at least one database');
+    if (!hasValidDatabase) {
+      alert('Please configure at least one database URL');
       return;
     }
 
@@ -170,7 +257,74 @@ export const DatabaseConfigModal: React.FC<DatabaseConfigModalProps> = ({
 
         {/* Content */}
         <div className="p-6 space-y-6">
-          {Object.entries(DATABASE_TYPES).map(([type, info]) => (
+          {/* Notion Integration Token */}
+          <div className="space-y-3 bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <div>
+              <label className="block text-sm font-medium text-blue-800 mb-1">
+                Notion Integration Token
+              </label>
+              <p className="text-xs text-blue-600 mb-3">
+                Your Notion integration token (required). Get yours from{' '}
+                <a 
+                  href="https://www.notion.so/my-integrations" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="underline hover:text-blue-800"
+                >
+                  https://www.notion.so/my-integrations
+                </a>
+              </p>
+            </div>
+            
+            <div className="relative">
+              <input
+                type="password"
+                value={config.token || ''}
+                onChange={(e) => handleTokenChange(e.target.value)}
+                placeholder="secret_your_notion_integration_token_here"
+                className="block w-full px-3 py-2 border border-blue-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm font-mono"
+              />
+              
+              {/* Token validation indicator */}
+              <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
+                {config.token && (
+                  validation.token.isValid ? (
+                    <CheckCircleIcon className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <ExclamationTriangleIcon className="h-5 w-5 text-red-500" />
+                  )
+                )}
+                {config.token && validation.token.isValid && (
+                  <button
+                    type="button"
+                    onClick={validateTokenWithServer}
+                    disabled={isValidatingToken}
+                    className="text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded disabled:opacity-50"
+                  >
+                    {isValidatingToken ? 'Testing...' : 'Test'}
+                  </button>
+                )}
+              </div>
+            </div>
+            
+            {/* Token validation message */}
+            {config.token && validation.token.message && (
+              <p className={`text-xs ${
+                validation.token.isValid 
+                  ? 'text-green-600' 
+                  : 'text-red-600'
+              }`}>
+                {validation.token.message}
+              </p>
+            )}
+          </div>
+
+          {/* Database URLs */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium text-gray-700 border-b pb-2">
+              Database URLs (Optional - can be configured later)
+            </h3>
+            {Object.entries(DATABASE_TYPES).map(([type, info]) => (
             <div key={type} className="space-y-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -216,11 +370,13 @@ export const DatabaseConfigModal: React.FC<DatabaseConfigModalProps> = ({
             </div>
           ))}
 
+          </div>
+          
           {/* Test connections button */}
           <div className="flex items-center justify-center pt-4">
             <button
               onClick={testDatabaseConnections}
-              disabled={isValidating || !Object.values(config).some(url => url.trim())}
+              disabled={isValidating || !config.token || !validation.token.isValid || !Object.entries(config).filter(([key]) => key !== 'token').some(([, url]) => url && url.trim())}
               className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isValidating ? 'Testing Connections...' : 'Test Database Connections'}

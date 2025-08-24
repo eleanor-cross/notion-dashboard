@@ -3,7 +3,8 @@
 
 const express = require('express');
 const router = express.Router();
-const notionService = require('../services/notionClient');
+const dynamicNotionService = require('../services/dynamicNotionClient');
+const { getSessionConfig } = require('./database');
 
 // Test mode mock data
 const mockData = {
@@ -41,7 +42,17 @@ const mockData = {
 // Tasks endpoints
 router.get('/tasks', async (req, res) => {
   try {
-    const tasks = await notionService.getTasks();
+    const sessionId = req.headers['session-id'] || 'default';
+    const { token, databases } = getSessionConfig(sessionId);
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: 'No Notion token configured. Please configure your token first.'
+      });
+    }
+    
+    const tasks = await dynamicNotionService.getTasks(token, databases);
     res.json({ success: true, data: tasks });
   } catch (error) {
     res.status(500).json({ 
@@ -53,7 +64,17 @@ router.get('/tasks', async (req, res) => {
 
 router.get('/tasks/today', async (req, res) => {
   try {
-    const tasks = await notionService.getTodaysTasks();
+    const sessionId = req.headers['session-id'] || 'default';
+    const { token, databases } = getSessionConfig(sessionId);
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: 'No Notion token configured. Please configure your token first.'
+      });
+    }
+    
+    const tasks = await dynamicNotionService.getTodaysTasks(token, databases);
     res.json({ success: true, data: tasks });
   } catch (error) {
     res.status(500).json({ 
@@ -65,7 +86,17 @@ router.get('/tasks/today', async (req, res) => {
 
 router.get('/tasks/active', async (req, res) => {
   try {
-    const tasks = await notionService.getActiveTasks();
+    const sessionId = req.headers['session-id'] || 'default';
+    const { token, databases } = getSessionConfig(sessionId);
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: 'No Notion token configured. Please configure your token first.'
+      });
+    }
+    
+    const tasks = await dynamicNotionService.getActiveTasks(token, databases);
     res.json({ success: true, data: tasks });
   } catch (error) {
     res.status(500).json({ 
@@ -78,7 +109,17 @@ router.get('/tasks/active', async (req, res) => {
 // Textbooks endpoints
 router.get('/textbooks', async (req, res) => {
   try {
-    const textbooks = await notionService.getTextbooks();
+    const sessionId = req.headers['session-id'] || 'default';
+    const { token, databases } = getSessionConfig(sessionId);
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: 'No Notion token configured. Please configure your token first.'
+      });
+    }
+    
+    const textbooks = await dynamicNotionService.getTextbooks(token, databases);
     res.json({ success: true, data: textbooks });
   } catch (error) {
     res.status(500).json({ 
@@ -91,7 +132,17 @@ router.get('/textbooks', async (req, res) => {
 // Schedule endpoints
 router.get('/schedule/today', async (req, res) => {
   try {
-    const schedule = await notionService.getTodaysSchedule();
+    const sessionId = req.headers['session-id'] || 'default';
+    const { token, databases } = getSessionConfig(sessionId);
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: 'No Notion token configured. Please configure your token first.'
+      });
+    }
+    
+    const schedule = await dynamicNotionService.getTodaysSchedule(token, databases);
     res.json({ success: true, data: schedule });
   } catch (error) {
     res.status(500).json({ 
@@ -121,7 +172,19 @@ router.post('/reading-session', async (req, res) => {
 
     const readingSpeed = (pagesRead / (duration / 3600000)); // pages per hour
     
-    const session = await notionService.createReadingSession(
+    const sessionId = req.headers['session-id'] || 'default';
+    const { token, databases } = getSessionConfig(sessionId);
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: 'No Notion token configured. Please configure your token first.'
+      });
+    }
+    
+    const session = await dynamicNotionService.createReadingSession(
+      token,
+      databases,
       textbookId,
       textbookName,
       className,

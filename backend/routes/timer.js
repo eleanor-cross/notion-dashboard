@@ -3,7 +3,8 @@
 
 const express = require('express');
 const router = express.Router();
-const notionService = require('../services/notionClient');
+const dynamicNotionService = require('../services/dynamicNotionClient');
+const { getSessionConfig } = require('./database');
 
 // In-memory store for active timers (in production, use Redis or database)
 const activeTimers = new Map();
@@ -61,8 +62,20 @@ router.post('/start', async (req, res) => {
 
     const startTime = new Date().toISOString();
     
+    // Get session configuration for token and databases
+    const { token, databases } = getSessionConfig(sessionId);
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: 'No Notion token configured. Please configure your token first.'
+      });
+    }
+    
     // Create initial time entry in Notion
-    const timeEntry = await notionService.createTimeEntry(
+    const timeEntry = await dynamicNotionService.createTimeEntry(
+      token,
+      databases,
       taskId,
       taskName,
       startTime
@@ -113,11 +126,21 @@ router.post('/stop', async (req, res) => {
     const endTime = new Date().toISOString();
     const duration = Date.now() - activeTimer.startTimestamp;
 
+    // Get session configuration for token
+    const { token } = getSessionConfig(sessionId);
+    
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        error: 'No Notion token configured. Cannot update time entry.'
+      });
+    }
+    
     // Update the Notion entry with end time and duration
-    await notionService.updateTimeEntry(
+    await dynamicNotionService.updateTimeEntry(
+      token,
       activeTimer.entryId,
-      endTime,
-      duration
+      endTime
     );
 
     // Remove from active timers
@@ -202,6 +225,9 @@ router.post('/quick-start', async (req, res) => {
 
     const startTime = new Date().toISOString();
     
+    // Get session configuration for token and databases
+    const { token, databases } = getSessionConfig(sessionId);
+    
     // Create initial time entry in Notion (skip in test mode)
     let timeEntry;
     if (process.env.NODE_ENV === 'test') {
@@ -212,7 +238,16 @@ router.post('/quick-start', async (req, res) => {
         startTime
       };
     } else {
-      timeEntry = await notionService.createTimeEntry(
+      if (!token) {
+        return res.status(400).json({
+          success: false,
+          error: 'No Notion token configured. Please configure your token first.'
+        });
+      }
+      
+      timeEntry = await dynamicNotionService.createTimeEntry(
+        token,
+        databases,
         null,
         taskName,
         startTime
