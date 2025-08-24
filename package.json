@@ -1,0 +1,50 @@
+{
+  "name": "duke-law-dashboard",
+  "version": "1.0.0",
+  "description": "Notion-integrated productivity dashboard for Duke Law students",
+  "main": "server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon backend/server.js",
+    "client": "cd frontend && npm start",
+    "build": "cd frontend && npm run build",
+    "start": "node backend/server.js",
+    "install-all": "npm install && cd frontend && npm install",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cross-env NODE_ENV=test jest --config=jest.backend.config.js",
+    "test:frontend": "cd frontend && npm test -- --coverage --watchAll=false",
+    "test:watch": "concurrently \"npm run test:backend -- --watch\" \"npm run test:frontend -- --watch\"",
+    "test:coverage": "npm run test:backend -- --coverage && npm run test:frontend -- --coverage",
+    "test:integration": "cross-env NODE_ENV=test jest --config=jest.integration.config.js"
+  },
+  "keywords": [
+    "notion",
+    "dashboard",
+    "productivity",
+    "law-school"
+  ],
+  "author": "Duke Law Student",
+  "license": "MIT",
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "all": "^0.0.0",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "axios": "^1.11.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

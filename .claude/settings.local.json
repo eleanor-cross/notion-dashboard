@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test:*)",
+      "Bash(npm run test:backend:*)",
+      "Bash(npx jest:*)",
+      "Bash(npm run test:integration:*)",
+      "Bash(npm run test:frontend:*)",
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(rm:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm run server:*)",
+      "Bash(npm start)",
+      "Bash(set PORT=3000)",
+      "Bash(cross-env:*)",
+      "Bash(node server.js)"
+    ],
+    "deny": []
+  }
+}
