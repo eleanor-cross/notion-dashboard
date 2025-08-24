@@ -56,7 +56,7 @@ beforeAll(async () => {
   
   // Ensure no server is already running on the test port
   try {
-    await axios.get('http://localhost:3002/health');
+    await axios.get('http://localhost:3002/api/health');
     console.warn('Server already running on port 3002, attempting to continue...');
   } catch (error) {
     // Expected when no server is running
@@ -107,7 +107,7 @@ beforeAll(async () => {
 
   // Wait for server to start with proper error handling
   try {
-    await waitForServer('http://localhost:3002/health', 45000); // Increased timeout
+    await waitForServer('http://localhost:3002/api/health', 45000); // Increased timeout
     console.log('Integration test server startup complete');
   } catch (error) {
     console.error('Failed to start integration test server:', error.message);

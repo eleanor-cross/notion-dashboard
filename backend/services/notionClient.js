@@ -29,7 +29,7 @@ class NotionService {
         database_id: this.databases.tasks,
         sorts: [
           {
-            property: 'Due date',
+            property: 'Due Date',
             direction: 'ascending'
           }
         ]
@@ -54,14 +54,14 @@ class NotionService {
     const filter = {
       and: [
         {
-          property: 'Due date',
+          property: 'Due Date',
           date: {
             equals: today
           }
         },
         {
           property: 'Status',
-          status: {
+          select: {
             does_not_equal: 'Done'
           }
         }
@@ -73,7 +73,7 @@ class NotionService {
   async getActiveTasks() {
     const filter = {
       property: 'Status',
-      status: {
+      select: {
         equals: 'In Progress'
       }
     };
