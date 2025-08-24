@@ -167,24 +167,115 @@ Required properties:
 
 ## 🚀 Deployment
 
-### Option 1: Vercel (Recommended)
+### Vercel (Frontend Only) - Recommended
+The frontend is optimized for Vercel deployment with automatic React optimization.
+
+**Quick Deploy:**
+1. Connect your GitHub repository to Vercel
+2. Vercel automatically detects the configuration from `vercel.json`
+3. Set environment variables in Vercel dashboard:
+   ```
+   REACT_APP_API_URL=https://your-backend.railway.app/api
+   ```
+4. Deploy! 🎉
+
+**Important Notes:**
+- The backend requires separate deployment (see Backend Deployment below)
+- Database configuration is handled through the UI after deployment
+- Static assets are optimized automatically by Vercel
+
+### Backend Deployment Options
+
+#### Railway (Recommended for Backend)
 ```bash
-npm run build
-# Deploy to Vercel with environment variables
+# Deploy backend to Railway
+railway login
+railway new
+railway add --path backend
+railway deploy
 ```
 
-### Option 2: Railway/Render
+#### Render
 ```bash
-# Backend deployment
-# Set environment variables in platform
-# Deploy backend first, then frontend with API URL
+# Create new web service
+# Root directory: backend
+# Build command: npm install
+# Start command: npm start
 ```
 
-### Option 3: Docker
+### Full-Stack Alternative: Railway
+Deploy both frontend and backend together:
 ```bash
-# Build containers
-docker-compose up --build
+railway new
+railway add
+railway deploy
+# Configure build settings for monorepo structure
 ```
+
+## 🔧 Deployment Configuration
+
+### Vercel Setup
+The repository includes `vercel.json` with optimized settings:
+- **Build Command**: `cd frontend && npm ci && npm run build`
+- **Output Directory**: `frontend/build`
+- **Framework**: Create React App (auto-detected)
+- **API Routes**: Configured to proxy to your backend
+
+### Environment Variables
+
+#### Development (.env)
+```env
+NODE_ENV=development
+NOTION_TOKEN=secret_your_token
+PORT=3001
+```
+
+#### Production (Vercel Dashboard)
+```env
+REACT_APP_API_URL=https://your-backend.railway.app/api
+NODE_ENV=production
+```
+
+## 🚨 Deployment Troubleshooting
+
+### Common Vercel Issues
+
+#### "react-scripts: command not found"
+**Solution**: Ensure `vercel.json` is properly configured (included in repository)
+
+#### Build Timeout
+**Solution**: Increase build timeout in Vercel dashboard (Settings → Functions → Timeout)
+
+#### API Connection Issues
+**Solution**: 
+1. Verify backend is deployed and accessible
+2. Check `REACT_APP_API_URL` in Vercel environment variables
+3. Ensure CORS is configured in backend for your Vercel domain
+
+### Backend API Issues
+
+#### CORS Errors
+Add your Vercel domain to backend CORS configuration:
+```javascript
+const cors = require('cors');
+app.use(cors({
+  origin: ['http://localhost:3004', 'https://your-app.vercel.app']
+}));
+```
+
+#### Environment Variables
+Ensure your backend deployment includes:
+- `NOTION_TOKEN` (your Notion integration token)
+- `PORT` (usually provided by hosting platform)
+
+### Database Configuration
+After deployment:
+1. Visit your deployed app
+2. Click "🔧 Configure Notion Databases"
+3. Enter your Notion database URLs
+4. Test connections and save
+
+See `DEPLOYMENT_ERROR_ANALYSIS.md` for detailed troubleshooting information.
 
 ## 🔐 Security Features
 
