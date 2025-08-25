@@ -141,3 +141,167 @@ When encountering tool failures (biome, ruff, pytest, etc.):
 - Build competence with development tools rather than avoiding them
 
 Remember: Quality tools are guardrails that help you, not barriers that block you.
+
+# 🚀 **CURRENT PROJECT STATUS** (Updated: August 25, 2025)
+
+## **Project Overview: Duke Law Dashboard**
+
+A Notion-integrated productivity tracker for law students with widget embedding capabilities.
+
+### **🎯 Current State: PRODUCTION READY**
+- ✅ **GitHub**: Latest code pushed (`commit a8cc30c`)
+- ✅ **Vercel**: Deployed and operational 
+- ✅ **Features**: Dynamic token config + Widget embedding implemented
+- ✅ **Local Dev**: Working on ports 3005 (frontend) & 3002 (backend)
+- ⚠️ **Production Config**: Needs environment variables in Vercel
+
+## **🏗️ Architecture**
+
+```
+Frontend (React + TypeScript)
+├── Port: 3005 (development)
+├── Router: Individual widget routes (/widget/:type, /embed/:type)
+├── Components: Timer, QuickTasks, ReadingTracker, Analytics
+├── Features: Database config modal, widget sharing, theme system
+└── Build: Static files served by Vercel
+
+Backend (Express.js + Node.js) 
+├── Port: 3002 (development)
+├── API: /api/health, /api/notion/*, /api/timer/*, /api/database/*
+├── Services: Dynamic Notion client with runtime token injection
+├── Security: CORS, rate limiting, AES-256-CBC encryption
+└── Deploy: Vercel serverless functions
+
+Database Integration
+├── Notion API: Dynamic token configuration
+├── Encryption: AES-256-CBC for session token storage  
+├── Validation: Server-side token validation endpoints
+└── Fallback: Environment variable backup system
+```
+
+## **✨ Key Features Implemented**
+
+### **Dynamic Token Configuration** ✅
+- Runtime NOTION_TOKEN input through dashboard UI
+- AES-256-CBC encryption for secure session storage
+- Server-side token validation with /api/database endpoints
+- Fallback to environment variables for backward compatibility
+- Enhanced DatabaseConfigModal with real-time validation
+
+### **Widget Embedding System** ✅  
+- Individual routes: `/embed/timer`, `/embed/quick-tasks`, `/embed/reading`, `/embed/analytics`
+- Share buttons on all dashboard widgets with copy-to-clipboard
+- iframe-optimized layouts with responsive CSS (`embed.css`)
+- CORS configured for Notion domain embedding
+- Standalone + embedded modes for each widget
+
+### **Production Infrastructure** ✅
+- Security headers: CSP, frame options for iframe compatibility  
+- Rate limiting: 100 requests per 15-minute window
+- Error handling: Comprehensive error responses with logging
+- Health monitoring: `/api/health` endpoint with build info
+- Theme system: Centralized CSS custom properties
+
+## **🛠️ Development Setup**
+
+### **Local Development Ports**
+```bash
+Frontend: http://localhost:3005  (React dev server)
+Backend:  http://localhost:3002  (Express API server)
+```
+
+### **Quick Start Commands**
+```bash
+# Backend (Terminal 1)
+cd backend && npm start
+
+# Frontend (Terminal 2) 
+cd frontend && npm start
+```
+
+### **Environment Configuration**
+- **Frontend**: `.env` file sets `PORT=3005`
+- **Backend**: `.env` file sets `PORT=3002` 
+- **Proxy**: package.json proxy points frontend → backend
+
+## **🌐 Production URLs**
+
+### **Main Dashboard**
+```
+https://notion-dashboard-qhcrnnmir-eleanors-projects-6db44061.vercel.app
+```
+
+### **Widget Embedding (Ready for Notion)**
+```
+Timer:      /embed/timer
+Quick Tasks: /embed/quick-tasks  
+Reading:    /embed/reading
+Analytics:  /embed/analytics
+```
+
+## **🔧 Known Issues & Next Steps**
+
+### **Environment Variables Needed in Vercel**
+```env
+NOTION_TOKEN=secret_your_production_token
+TASKS_DB_ID=your_notion_database_id
+TIME_TRACKING_DB_ID=your_notion_database_id  
+TEXTBOOKS_DB_ID=your_notion_database_id
+SCHEDULE_DB_ID=your_notion_database_id
+```
+
+### **Development Notes**
+- Database configuration modal works locally but needs production env vars
+- All widget embedding URLs are functional and iframe-ready
+- Theme system prototypes available in `/frontend/src/styles/prototypes/`
+- Troubleshooting: Proxy issues were resolved (3001→3002 port fix)
+
+## **📂 Key Files to Know**
+
+### **Frontend Core**
+- `src/App.tsx` - Main dashboard with widget containers
+- `src/Router.tsx` - Routing system for widget embedding
+- `src/pages/WidgetPage.tsx` - Standalone/embedded widget renderer
+- `src/components/DatabaseConfigModal.tsx` - Token configuration UI
+- `src/components/WidgetShareButton.tsx` - Copy-to-clipboard sharing
+
+### **Backend Core** 
+- `server.js` - Express server with CORS & security middleware
+- `services/dynamicNotionClient.js` - Runtime token injection service  
+- `routes/database.js` - Token validation & configuration endpoints
+- `routes/notion.js` - Notion API integration routes
+
+### **Configuration**
+- `vercel.json` - Vercel deployment configuration
+- `package.json` - Dependencies & proxy settings
+- `.env.production` - Production environment template
+
+## **🎯 Last Session Summary**
+
+### **Issues Resolved**
+1. **Database Configuration Modal Not Working** → Fixed proxy routing (3001→3002)
+2. **Port Conflicts** → Frontend moved to 3005, backend on 3002
+3. **Deployment Issues** → All changes pushed to GitHub & Vercel deployed
+
+### **Features Added**
+1. **Widget Embedding System** → Individual widgets embeddable in Notion
+2. **Share Buttons** → Copy-to-clipboard functionality for all widgets  
+3. **Production Deployment** → Fully deployed and operational
+
+### **Current Status**
+- All core functionality working in development
+- Production deployment successful 
+- Widget embedding ready for Notion integration
+- Database configuration needs Vercel environment variable setup
+
+## **🔄 Picking Up Where We Left Off**
+
+When starting a new session:
+
+1. **Check if servers are running**: Frontend on 3005, backend on 3002
+2. **Verify latest changes**: Check git log for recent commits  
+3. **Test widget embedding**: Use `/embed/*` URLs for Notion integration
+4. **Configure production**: Set up Vercel environment variables if needed
+5. **Monitor deployment**: Use `vercel ls` to check latest deployment status
+
+The project is in a stable, production-ready state with all major features implemented.
