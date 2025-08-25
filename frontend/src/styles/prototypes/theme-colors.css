@@ -1,0 +1,158 @@
+/* ================================================
+   CENTRAL COLOR THEME SYSTEM
+   ================================================
+   All colors are defined here as CSS variables.
+   Change these values to update colors across all components.
+   ================================================ */
+
+:root {
+  /* ===== PRIMARY THEME COLORS ===== */
+  
+  /* Background - Main background color for containers/surfaces */
+  --theme-background: #ffffff;
+  --theme-background-alt: #f9fafb;  /* Alternative/secondary background */
+  --theme-background-overlay: rgba(255, 255, 255, 0.95);  /* Overlays/modals */
+  
+  /* Text - Text color hierarchy */
+  --theme-text: #1f2937;  /* Primary text */
+  --theme-text-secondary: #6b7280;  /* Secondary/muted text */
+  --theme-text-inverse: #ffffff;  /* Text on dark backgrounds */
+  
+  /* Accent - Primary brand/accent color */
+  --theme-accent: #7c3aed;  /* Purple accent */
+  --theme-accent-hover: #6d28d9;  /* Darker on hover */
+  --theme-accent-light: rgba(124, 58, 237, 0.15);  /* Light tint */
+  
+  /* Color1 - First semantic color (often warm) */
+  --theme-color1: #f59e0b;  /* Amber/Orange */
+  --theme-color1-hover: #d97706;
+  --theme-color1-light: rgba(245, 158, 11, 0.15);
+  
+  /* Color2 - Second semantic color (often cool) */
+  --theme-color2: #06b6d4;  /* Cyan */
+  --theme-color2-hover: #0891b2;
+  --theme-color2-light: rgba(6, 182, 212, 0.15);
+  
+  /* Color3 - Third semantic color (often vibrant) */
+  --theme-color3: #ec4899;  /* Pink */
+  --theme-color3-hover: #db2777;
+  --theme-color3-light: rgba(236, 72, 153, 0.15);
+  
+  /* ===== DERIVED COLORS ===== */
+  
+  /* Surfaces & Borders */
+  --theme-surface: var(--theme-background);
+  --theme-surface-alt: var(--theme-background-alt);
+  --theme-border: #e5e7eb;
+  --theme-border-dark: #d1d5db;
+  
+  /* Shadows */
+  --theme-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --theme-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --theme-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --theme-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* Gradients */
+  --theme-gradient-primary: linear-gradient(135deg, var(--theme-accent) 0%, var(--theme-color1) 100%);
+  --theme-gradient-cool: linear-gradient(135deg, var(--theme-color2) 0%, var(--theme-accent) 100%);
+  --theme-gradient-warm: linear-gradient(135deg, var(--theme-color1) 0%, var(--theme-color3) 100%);
+  --theme-gradient-vibrant: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* ===== THEME PRESETS ===== */
+
+/* Ocean Theme */
+[data-theme="ocean"] {
+  --theme-background: #ffffff;
+  --theme-text: #164e63;
+  --theme-accent: #0e7490;
+  --theme-color1: #0891b2;
+  --theme-color2: #06b6d4;
+  --theme-color3: #67e8f9;
+}
+
+/* Sunset Theme */
+[data-theme="sunset"] {
+  --theme-background: #fffbeb;
+  --theme-text: #7c2d12;
+  --theme-accent: #ea580c;
+  --theme-color1: #dc2626;
+  --theme-color2: #f97316;
+  --theme-color3: #fbbf24;
+}
+
+/* Forest Theme */
+[data-theme="forest"] {
+  --theme-background: #f0fdf4;
+  --theme-text: #064e3b;
+  --theme-accent: #047857;
+  --theme-color1: #059669;
+  --theme-color2: #10b981;
+  --theme-color3: #34d399;
+}
+
+/* Duke Blue Theme */
+[data-theme="duke"] {
+  --theme-background: #ffffff;
+  --theme-text: #001a57;  /* Duke Navy Blue */
+  --theme-accent: #003087;  /* Duke Blue */
+  --theme-color1: #005587;  /* Lighter Duke Blue */
+  --theme-color2: #0577b1;  /* Duke Light Blue */
+  --theme-color3: #339999;  /* Duke Teal */
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --theme-background: #111827;
+  --theme-background-alt: #1f2937;
+  --theme-background-overlay: rgba(31, 41, 55, 0.95);
+  --theme-text: #f9fafb;
+  --theme-text-secondary: #9ca3af;
+  --theme-text-inverse: #111827;
+  --theme-accent: #a78bfa;
+  --theme-color1: #fbbf24;
+  --theme-color2: #60a5fa;
+  --theme-color3: #f472b6;
+  --theme-border: #374151;
+  --theme-border-dark: #4b5563;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Background utilities */
+.bg-theme { background-color: var(--theme-background); }
+.bg-theme-alt { background-color: var(--theme-background-alt); }
+.bg-theme-overlay { background: var(--theme-background-overlay); }
+.bg-accent { background-color: var(--theme-accent); }
+.bg-color1 { background-color: var(--theme-color1); }
+.bg-color2 { background-color: var(--theme-color2); }
+.bg-color3 { background-color: var(--theme-color3); }
+
+/* Text utilities */
+.text-theme { color: var(--theme-text); }
+.text-theme-secondary { color: var(--theme-text-secondary); }
+.text-theme-inverse { color: var(--theme-text-inverse); }
+.text-accent { color: var(--theme-accent); }
+.text-color1 { color: var(--theme-color1); }
+.text-color2 { color: var(--theme-color2); }
+.text-color3 { color: var(--theme-color3); }
+
+/* Border utilities */
+.border-theme { border-color: var(--theme-border); }
+.border-theme-dark { border-color: var(--theme-border-dark); }
+.border-accent { border-color: var(--theme-accent); }
+.border-color1 { border-color: var(--theme-color1); }
+.border-color2 { border-color: var(--theme-color2); }
+.border-color3 { border-color: var(--theme-color3); }
+
+/* Shadow utilities */
+.shadow-theme-sm { box-shadow: var(--theme-shadow-sm); }
+.shadow-theme-md { box-shadow: var(--theme-shadow-md); }
+.shadow-theme-lg { box-shadow: var(--theme-shadow-lg); }
+.shadow-theme-xl { box-shadow: var(--theme-shadow-xl); }
+
+/* Gradient utilities */
+.gradient-primary { background: var(--theme-gradient-primary); }
+.gradient-cool { background: var(--theme-gradient-cool); }
+.gradient-warm { background: var(--theme-gradient-warm); }
+.gradient-vibrant { background: var(--theme-gradient-vibrant); }

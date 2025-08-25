@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Clock with Tick Marks Test</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+        svg {
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .tick {
+            stroke: #7c3aed;
+            stroke-width: 1;
+            opacity: 0.5;
+        }
+        .tick-major {
+            stroke: #7c3aed;
+            stroke-width: 3;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <svg width="400" height="400">
+        <!-- Background circle -->
+        <circle cx="200" cy="200" r="190" fill="white" stroke="#e0e0e0" stroke-width="2"/>
+        
+        <!-- Tick marks will be added here by JavaScript -->
+        
+        <!-- Clock face center -->
+        <circle cx="200" cy="200" r="5" fill="#7c3aed"/>
+    </svg>
+
+    <script>
+        const svg = document.querySelector('svg');
+        
+        // Add hour ticks (12 marks)
+        for (let i = 0; i < 12; i++) {
+            const angle = (i * 30) - 90; // 30 degrees per hour
+            const angleRad = (angle * Math.PI) / 180;
+            
+            const innerRadius = 170;
+            const outerRadius = 190;
+            
+            const x1 = 200 + innerRadius * Math.cos(angleRad);
+            const y1 = 200 + innerRadius * Math.sin(angleRad);
+            const x2 = 200 + outerRadius * Math.cos(angleRad);
+            const y2 = 200 + outerRadius * Math.sin(angleRad);
+            
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.setAttribute('class', i % 3 === 0 ? 'tick-major' : 'tick');
+            
+            svg.appendChild(line);
+        }
+        
+        // Add minute ticks (60 marks)
+        for (let i = 0; i < 60; i++) {
+            if (i % 5 !== 0) { // Skip positions where hour marks are
+                const angle = (i * 6) - 90; // 6 degrees per minute
+                const angleRad = (angle * Math.PI) / 180;
+                
+                const innerRadius = 180;
+                const outerRadius = 190;
+                
+                const x1 = 200 + innerRadius * Math.cos(angleRad);
+                const y1 = 200 + innerRadius * Math.sin(angleRad);
+                const x2 = 200 + outerRadius * Math.cos(angleRad);
+                const y2 = 200 + outerRadius * Math.sin(angleRad);
+                
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('class', 'tick');
+                line.style.opacity = '0.3';
+                
+                svg.appendChild(line);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Color System Demo</title>
+    <link rel="stylesheet" href="theme-colors.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--theme-background);
+            color: var(--theme-text);
+            padding: 40px;
+            margin: 0;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: var(--theme-text);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--theme-text-secondary);
+            margin-bottom: 30px;
+        }
+
+        /* Theme Switcher */
+        .theme-controls {
+            background: var(--theme-background-alt);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: var(--theme-shadow-md);
+        }
+
+        .theme-controls select {
+            padding: 10px 15px;
+            font-size: 1rem;
+            border: 1px solid var(--theme-border);
+            border-radius: 6px;
+            background: var(--theme-background);
+            color: var(--theme-text);
+            cursor: pointer;
+        }
+
+        /* Color Swatches */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .color-card {
+            background: var(--theme-background-overlay);
+            border: 1px solid var(--theme-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--theme-shadow-sm);
+        }
+
+        .color-swatch {
+            width: 100%;
+            height: 80px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.05);
+        }
+
+        .color-label {
+            font-size: 0.875rem;
+            color: var(--theme-text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .color-value {
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 0.75rem;
+            color: var(--theme-text);
+            opacity: 0.7;
+        }
+
+        /* Component Examples */
+        .components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .component-card {
+            background: var(--theme-background-overlay);
+            border: 1px solid var(--theme-border);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--theme-shadow-md);
+        }
+
+        .component-card h3 {
+            color: var(--theme-text);
+            margin-bottom: 15px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+
+        .btn-accent {
+            background: var(--theme-accent);
+            color: var(--theme-text-inverse);
+        }
+
+        .btn-accent:hover {
+            background: var(--theme-accent-hover);
+        }
+
+        .btn-color1 {
+            background: var(--theme-color1);
+            color: var(--theme-text-inverse);
+        }
+
+        .btn-color2 {
+            background: var(--theme-color2);
+            color: var(--theme-text-inverse);
+        }
+
+        .btn-color3 {
+            background: var(--theme-color3);
+            color: var(--theme-text-inverse);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .alert-accent {
+            background: var(--theme-accent-light);
+            color: var(--theme-accent);
+            border: 1px solid var(--theme-accent);
+        }
+
+        .alert-color1 {
+            background: var(--theme-color1-light);
+            color: var(--theme-color1);
+            border: 1px solid var(--theme-color1);
+        }
+
+        /* Gradients */
+        .gradient-box {
+            height: 100px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Theme Color System Demo</h1>
+        <p class="subtitle">All colors are centrally managed through CSS variables</p>
+
+        <!-- Theme Switcher -->
+        <div class="theme-controls">
+            <label for="theme">Select Theme: </label>
+            <select id="theme" onchange="changeTheme(this.value)">
+                <option value="">Default</option>
+                <option value="ocean">Ocean</option>
+                <option value="sunset">Sunset</option>
+                <option value="forest">Forest</option>
+                <option value="duke">Duke Blue</option>
+                <option value="dark">Dark</option>
+            </select>
+        </div>
+
+        <!-- Color Swatches -->
+        <h2>Theme Colors</h2>
+        <div class="color-grid">
+            <div class="color-card">
+                <div class="color-swatch bg-theme border-theme">
+                    <span class="text-theme">Background</span>
+                </div>
+                <div class="color-label">Background</div>
+                <div class="color-value">--theme-background</div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-swatch" style="background: var(--theme-text);">
+                    <span style="color: var(--theme-background);">Text</span>
+                </div>
+                <div class="color-label">Text</div>
+                <div class="color-value">--theme-text</div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-swatch bg-accent">
+                    <span class="text-theme-inverse">Accent</span>
+                </div>
+                <div class="color-label">Accent</div>
+                <div class="color-value">--theme-accent</div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-swatch bg-color1">
+                    <span class="text-theme-inverse">Color1</span>
+                </div>
+                <div class="color-label">Color1 (Warm)</div>
+                <div class="color-value">--theme-color1</div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-swatch bg-color2">
+                    <span class="text-theme-inverse">Color2</span>
+                </div>
+                <div class="color-label">Color2 (Cool)</div>
+                <div class="color-value">--theme-color2</div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-swatch bg-color3">
+                    <span class="text-theme-inverse">Color3</span>
+                </div>
+                <div class="color-label">Color3 (Vibrant)</div>
+                <div class="color-value">--theme-color3</div>
+            </div>
+        </div>
+
+        <!-- Component Examples -->
+        <h2>Component Examples</h2>
+        <div class="components">
+            <div class="component-card">
+                <h3>Buttons</h3>
+                <button class="btn btn-accent">Accent Button</button>
+                <button class="btn btn-color1">Color1 Button</button>
+                <button class="btn btn-color2">Color2 Button</button>
+                <button class="btn btn-color3">Color3 Button</button>
+            </div>
+
+            <div class="component-card">
+                <h3>Alerts</h3>
+                <div class="alert alert-accent">This is an accent alert using theme colors</div>
+                <div class="alert alert-color1">This is a Color1 alert with automatic tinting</div>
+            </div>
+
+            <div class="component-card">
+                <h3>Gradients</h3>
+                <div class="gradient-box gradient-primary">Primary Gradient</div>
+                <div class="gradient-box gradient-cool">Cool Gradient</div>
+                <div class="gradient-box gradient-warm">Warm Gradient</div>
+            </div>
+        </div>
+
+        <!-- Usage Example -->
+        <div class="component-card">
+            <h3>How to Use</h3>
+            <p>Simply import the theme CSS and use the variables:</p>
+            <pre style="background: var(--theme-background-alt); padding: 15px; border-radius: 6px; overflow-x: auto;">
+/* Import theme */
+@import './theme-colors.css';
+
+/* Use variables */
+.my-component {
+  background: var(--theme-background);
+  color: var(--theme-text);
+  border: 1px solid var(--theme-border);
+}
+
+.my-button {
+  background: var(--theme-accent);
+  color: var(--theme-text-inverse);
+}</pre>
+        </div>
+    </div>
+
+    <script>
+        function changeTheme(theme) {
+            if (theme === '') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Clock Component Preview - Theme System</title>
+    <style>
+        /* ===== THEME COLOR SYSTEM ===== */
+        :root {
+            /* Background */
+            --theme-background: #ffffff;
+            --theme-background-alt: #f9fafb;
+            --theme-background-overlay: rgba(255, 255, 255, 0.95);
+            
+            /* Text */
+            --theme-text: #1f2937;
+            --theme-text-secondary: #6b7280;
+            --theme-text-inverse: #ffffff;
+            
+            /* Accent */
+            --theme-accent: #7c3aed;
+            --theme-accent-hover: #6d28d9;
+            --theme-accent-light: rgba(124, 58, 237, 0.15);
+            
+            /* Color1 - Warm */
+            --theme-color1: #f59e0b;
+            --theme-color1-hover: #d97706;
+            --theme-color1-light: rgba(245, 158, 11, 0.15);
+            
+            /* Color2 - Cool */
+            --theme-color2: #06b6d4;
+            --theme-color2-hover: #0891b2;
+            --theme-color2-light: rgba(6, 182, 212, 0.15);
+            
+            /* Color3 - Vibrant */
+            --theme-color3: #ec4899;
+            --theme-color3-hover: #db2777;
+            --theme-color3-light: rgba(236, 72, 153, 0.15);
+            
+            /* Derived */
+            --theme-border: #e5e7eb;
+            --theme-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --theme-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --theme-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --theme-gradient-vibrant: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        /* Theme Presets */
+        [data-theme="ocean"] {
+            --theme-background: #ffffff;
+            --theme-text: #164e63;
+            --theme-accent: #0e7490;
+            --theme-color1: #0891b2;
+            --theme-color2: #06b6d4;
+            --theme-color3: #67e8f9;
+        }
+        
+        [data-theme="sunset"] {
+            --theme-background: #fffbeb;
+            --theme-text: #7c2d12;
+            --theme-accent: #ea580c;
+            --theme-color1: #dc2626;
+            --theme-color2: #f97316;
+            --theme-color3: #fbbf24;
+        }
+        
+        [data-theme="forest"] {
+            --theme-background: #f0fdf4;
+            --theme-text: #064e3b;
+            --theme-accent: #047857;
+            --theme-color1: #059669;
+            --theme-color2: #10b981;
+            --theme-color3: #34d399;
+        }
+        
+        [data-theme="duke"] {
+            --theme-background: #ffffff;
+            --theme-text: #001a57;
+            --theme-accent: #003087;
+            --theme-color1: #005587;
+            --theme-color2: #0577b1;
+            --theme-color3: #339999;
+        }
+        
+        [data-theme="dark"] {
+            --theme-background: #111827;
+            --theme-background-alt: #1f2937;
+            --theme-background-overlay: rgba(31, 41, 55, 0.95);
+            --theme-text: #f9fafb;
+            --theme-text-secondary: #9ca3af;
+            --theme-text-inverse: #111827;
+            --theme-accent: #a78bfa;
+            --theme-color1: #fbbf24;
+            --theme-color2: #60a5fa;
+            --theme-color3: #f472b6;
+            --theme-border: #374151;
+        }
+
+        /* Page Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--theme-gradient-vibrant);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--theme-text-inverse);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        p {
+            font-size: 1.125rem;
+            margin-bottom: 20px;
+            color: var(--theme-text-inverse);
+            opacity: 0.95;
+        }
+
+        /* Theme Switcher */
+        .theme-switcher {
+            margin-bottom: 30px;
+            padding: 15px 30px;
+            background: var(--theme-background-overlay);
+            border-radius: 12px;
+            box-shadow: var(--theme-shadow-lg);
+        }
+
+        .theme-switcher label {
+            color: var(--theme-text);
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .theme-switcher select {
+            padding: 8px 15px;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--theme-border);
+            background: var(--theme-background);
+            color: var(--theme-text);
+            cursor: pointer;
+        }
+
+        .clock-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        .clock-card {
+            background: var(--theme-background-overlay);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: var(--theme-shadow-xl);
+        }
+
+        .clock-card h3 {
+            color: var(--theme-text);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .circular-clock-container {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            background: radial-gradient(
+                circle,
+                var(--theme-background-overlay),
+                var(--theme-background-alt)
+            );
+            border-radius: 50%;
+            box-shadow: var(--theme-shadow-lg), inset 0 -3px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .clock-svg {
+            position: absolute;
+            filter: drop-shadow(var(--theme-shadow-md));
+        }
+
+        .clock-ring-background {
+            fill: none;
+            stroke: var(--theme-border);
+            stroke-width: 20;
+            opacity: 0.15;
+        }
+
+        .clock-ring-outline {
+            fill: none;
+            stroke: var(--theme-accent, #7c3aed);
+            stroke-width: 3;
+            opacity: 0.5;
+        }
+
+        .clock-ring {
+            fill: none;
+            stroke-width: 16; /* Slightly smaller to leave room for border */
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Border rings - dark outlines that follow progress */
+        .clock-ring-border {
+            fill: none;
+            stroke: #333333;
+            stroke-width: 22; /* Wider than main ring to create border effect */
+            stroke-linecap: round;
+            opacity: 0.8;
+            transition: stroke-dasharray 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Clock rings use theme colors */
+        .clock-ring-hours { stroke: var(--theme-color1); }
+        .clock-ring-minutes { stroke: var(--theme-color2); }
+        .clock-ring-seconds { stroke: var(--theme-color3); }
+
+        .clock-dot {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .clock-dot-hours { fill: var(--theme-color1); }
+        .clock-dot-minutes { fill: var(--theme-color2); }
+        .clock-dot-seconds { fill: var(--theme-color3); }
+
+        .clock-digital-display {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            background: var(--theme-background-overlay);
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: var(--theme-shadow-md);
+            backdrop-filter: blur(10px);
+        }
+
+        .clock-time {
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--theme-text);
+            letter-spacing: 2px;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .clock-labels {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
+        .clock-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .clock-label-hours {
+            color: var(--theme-color1);
+            background: var(--theme-color1-light);
+        }
+
+        .clock-label-minutes {
+            color: var(--theme-color2);
+            background: var(--theme-color2-light);
+        }
+
+        .clock-label-seconds {
+            color: var(--theme-color3);
+            background: var(--theme-color3-light);
+        }
+
+        .clock-description {
+            color: var(--theme-text-secondary);
+            margin-top: 20px;
+            font-size: 0.875rem;
+        }
+
+        .clock-tick {
+            stroke: var(--theme-accent, #7c3aed);
+            stroke-width: 1;
+            opacity: 0.4;
+            fill: none;
+        }
+
+        .clock-tick-major {
+            stroke: var(--theme-accent, #7c3aed);
+            stroke-width: 2;
+            opacity: 0.8;
+            fill: none;
+        }
+
+        .clock-ticks {
+            opacity: 0.6;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .clock-dot-seconds {
+            animation: pulse-dot 1s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <h1>Circular Clock with Theme System</h1>
+    <p>Using centralized Background, Text, Accent, Color1, Color2, Color3</p>
+    
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <label for="theme-select">Choose Theme:</label>
+        <select id="theme-select" onchange="changeTheme(this.value)">
+            <option value="">Default</option>
+            <option value="ocean">Ocean</option>
+            <option value="sunset">Sunset</option>
+            <option value="forest">Forest</option>
+            <option value="duke">Duke Blue</option>
+            <option value="dark">Dark</option>
+        </select>
+    </div>
+    
+    <div class="clock-showcase">        <!-- Clock 1 - Theme Colors -->
+        <div class="clock-card">
+            <h3>Theme Colors</h3>
+            <div class="circular-clock-container" id="clock1">
+                <svg width="300" height="300" class="clock-svg">
+                    <!-- Background rings -->
+                    <circle cx="150" cy="150" r="135" class="clock-ring-background"/>
+                    <circle cx="150" cy="150" r="100" class="clock-ring-background"/>
+                    <circle cx="150" cy="150" r="65" class="clock-ring-background"/>
+                    
+                    <!-- Border rings - these follow the progress -->
+                    <!-- Hours border (behind the main ring) -->
+                    <circle cx="150" cy="150" r="135" 
+                            class="clock-ring-border"
+                            stroke="#333333" stroke-width="22" opacity="0.8"
+                            stroke-dasharray="0 848.23" 
+                            transform="rotate(-90 150 150)"/>
+                    
+                    <!-- Minutes border -->
+                    <circle cx="150" cy="150" r="100" 
+                            class="clock-ring-border"
+                            stroke="#333333" stroke-width="22" opacity="0.8"
+                            stroke-dasharray="0 628.32" 
+                            transform="rotate(-90 150 150)"/>
+                    
+                    <!-- Seconds border -->
+                    <circle cx="150" cy="150" r="65" 
+                            class="clock-ring-border"
+                            stroke="#333333" stroke-width="22" opacity="0.8"
+                            stroke-dasharray="0 408.41" 
+                            transform="rotate(-90 150 150)"/>
+                    
+                    <!-- Progress rings -->
+                    <circle cx="150" cy="150" r="135" class="clock-ring clock-ring-hours" 
+                            stroke-dasharray="0 848.23" transform="rotate(-90 150 150)"/>
+                    
+                    <circle cx="150" cy="150" r="100" class="clock-ring clock-ring-minutes" 
+                            stroke-dasharray="0 628.32" transform="rotate(-90 150 150)"/>
+                    
+                    <circle cx="150" cy="150" r="65" class="clock-ring clock-ring-seconds" 
+                            stroke-dasharray="0 408.41" transform="rotate(-90 150 150)"/>
+                    
+                    <!-- End dots -->
+                    <circle cx="150" cy="15" r="6" class="clock-dot clock-dot-hours"/>
+                    <circle cx="150" cy="50" r="5" class="clock-dot clock-dot-minutes"/>
+                    <circle cx="150" cy="85" r="4" class="clock-dot clock-dot-seconds"/>
+                </svg>
+                
+                <div class="clock-digital-display">
+                    <div class="clock-time" id="time1">10:25:45</div>
+                    <div class="clock-labels">
+                        <span class="clock-label clock-label-hours">H</span>
+                        <span class="clock-label clock-label-minutes">M</span>
+                        <span class="clock-label clock-label-seconds">S</span>
+                    </div>
+                </div>
+            </div>
+            <p class="clock-description">Color1 + Color2 + Color3</p>
+        </div>
+        <!-- Clock 2 - Accent Focus -->
+        <div class="clock-card">
+            <h3>Accent Focus</h3>
+            <div class="circular-clock-container" id="clock2">
+                <svg width="300" height="300" class="clock-svg">
+                    <!-- Background rings -->
+                    <circle cx="150" cy="150" r="135" class="clock-ring-background"/>
+                    <circle cx="150" cy="150" r="100" class="clock-ring-background"/>
+                    <circle cx="150" cy="150" r="65" class="clock-ring-background"/>
+                    
+                    <!-- Border rings - these follow the progress -->
+                    <!-- Hours border (behind the main ring) -->
+                    <circle cx="150" cy="150" r="135" 
+                            class="clock-ring-border"
+                            stroke="#333333" stroke-width="22" opacity="0.8"
+                            stroke-dasharray="0 848.23" 
+                            transform="rotate(-90 150 150)"/>
+                    
+                    <!-- Minutes border -->
+                    <circle cx="150" cy="150" r="100" 
+                            class="clock-ring-border"
+                            stroke="#333333" stroke-width="22" opacity="0.8"
+                            stroke-dasharray="0 628.32" 
+                            transform="rotate(-90 150 150)"/>
+                    
+                    <!-- Seconds border -->
+                    <circle cx="150" cy="150" r="65" 
+                            class="clock-ring-border"
+                            stroke="#333333" stroke-width="22" opacity="0.8"
+                            stroke-dasharray="0 408.41" 
+                            transform="rotate(-90 150 150)"/>
+                    
+                    <!-- Progress rings with custom styles -->
+                    <circle cx="150" cy="150" r="135" class="clock-ring" 
+                            style="stroke: var(--theme-accent);"
+                            stroke-dasharray="0 848.23" transform="rotate(-90 150 150)"/>
+                    <circle cx="150" cy="150" r="100" class="clock-ring clock-ring-minutes" 
+                            stroke-dasharray="0 628.32" transform="rotate(-90 150 150)"/>
+                    <circle cx="150" cy="150" r="65" class="clock-ring clock-ring-seconds" 
+                            stroke-dasharray="0 408.41" transform="rotate(-90 150 150)"/>
+                    
+                    <!-- End dots -->
+                    <circle cx="150" cy="15" r="6" class="clock-dot" style="fill: var(--theme-accent);"/>
+                    <circle cx="150" cy="50" r="5" class="clock-dot clock-dot-minutes"/>
+                    <circle cx="150" cy="85" r="4" class="clock-dot clock-dot-seconds"/>
+                </svg>
+                
+                <div class="clock-digital-display">
+                    <div class="clock-time" id="time2">03:15:30</div>
+                    <div class="clock-labels">
+                        <span class="clock-label" style="color: var(--theme-accent); background: var(--theme-accent-light);">H</span>
+                        <span class="clock-label clock-label-minutes">M</span>
+                        <span class="clock-label clock-label-seconds">S</span>
+                    </div>
+                </div>
+            </div>
+            <p class="clock-description">Accent + Color2 + Color3</p>
+        </div>
+
+        <!-- Clock 3 - Monochrome -->
+        <div class="clock-card">
+            <h3>Monochrome</h3>
+            <div class="circular-clock-container" id="clock3">
+                <svg width="300" height="300" class="clock-svg">
+                    <!-- Background rings -->
+                    <circle cx="150" cy="150" r="135" class="clock-ring-background"/>
+                    <circle cx="150" cy="150" r="100" class="clock-ring-background"/>
+                    <circle cx="150" cy="150" r="65" class="clock-ring-background"/>
+                    
+                    <!-- Border rings - these follow the progress -->
+                    <!-- Hours border (behind the main ring) -->
+                    <circle cx="150" cy="150" r="135" 
+                            class="clock-ring-border"
+                            stroke="#333333" stroke-width="22" opacity="0.8"
+                            stroke-dasharray="0 848.23" 
+                            transform="rotate(-90 150 150)"/>
+                    
+                    <!-- Minutes border -->
+                    <circle cx="150" cy="150" r="100" 
+                            class="clock-ring-border"
+                            stroke="#333333" stroke-width="22" opacity="0.8"
+                            stroke-dasharray="0 628.32" 
+                            transform="rotate(-90 150 150)"/>
+                    
+                    <!-- Seconds border -->
+                    <circle cx="150" cy="150" r="65" 
+                            class="clock-ring-border"
+                            stroke="#333333" stroke-width="22" opacity="0.8"
+                            stroke-dasharray="0 408.41" 
+                            transform="rotate(-90 150 150)"/>
+                    
+                    <!-- Progress rings with text colors -->
+                    <circle cx="150" cy="150" r="135" class="clock-ring" 
+                            style="stroke: var(--theme-text);"
+                            stroke-dasharray="0 848.23" transform="rotate(-90 150 150)"/>
+                    <circle cx="150" cy="150" r="100" class="clock-ring" 
+                            style="stroke: var(--theme-text-secondary);"
+                            stroke-dasharray="0 628.32" transform="rotate(-90 150 150)"/>
+                    <circle cx="150" cy="150" r="65" class="clock-ring" 
+                            style="stroke: var(--theme-accent);"
+                            stroke-dasharray="0 408.41" transform="rotate(-90 150 150)"/>
+                    
+                    <!-- End dots -->
+                    <circle cx="150" cy="15" r="6" class="clock-dot" style="fill: var(--theme-text);"/>
+                    <circle cx="150" cy="50" r="5" class="clock-dot" style="fill: var(--theme-text-secondary);"/>
+                    <circle cx="150" cy="85" r="4" class="clock-dot" style="fill: var(--theme-accent);"/>
+                </svg>
+                
+                <div class="clock-digital-display">
+                    <div class="clock-time" id="time3">18:45:00</div>
+                    <div class="clock-labels">
+                        <span class="clock-label" style="color: var(--theme-text); background: rgba(0,0,0,0.05);">H</span>
+                        <span class="clock-label" style="color: var(--theme-text-secondary); background: rgba(0,0,0,0.03);">M</span>
+                        <span class="clock-label" style="color: var(--theme-accent); background: var(--theme-accent-light);">S</span>
+                    </div>
+                </div>
+            </div>
+            <p class="clock-description">Text + Text Secondary + Accent</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to create tick marks properly
+        function createTicks(svg, cx, cy, radius, count, length, isMajor) {
+            const ticksGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            ticksGroup.setAttribute('class', 'clock-ticks');
+            
+            for (let i = 0; i < count; i++) {
+                const angle = (i * 360) / count - 90;
+                const angleRad = (angle * Math.PI) / 180;
+                
+                const x1 = cx + (radius - length) * Math.cos(angleRad);
+                const y1 = cy + (radius - length) * Math.sin(angleRad);
+                const x2 = cx + radius * Math.cos(angleRad);
+                const y2 = cy + radius * Math.sin(angleRad);
+                
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1.toFixed(2));
+                line.setAttribute('y1', y1.toFixed(2));
+                line.setAttribute('x2', x2.toFixed(2));
+                line.setAttribute('y2', y2.toFixed(2));
+                
+                // Set class and explicit stroke with fallback color
+                const isHourMark = isMajor && i % 3 === 0;
+                if (isHourMark) {
+                    line.setAttribute('class', 'clock-tick-major');
+                    line.style.stroke = 'var(--theme-accent, #7c3aed)';
+                    line.style.strokeWidth = '2';
+                    line.style.opacity = '0.8';
+                } else {
+                    line.setAttribute('class', 'clock-tick');
+                    line.style.stroke = 'var(--theme-accent, #7c3aed)';
+                    line.style.strokeWidth = '1';
+                    line.style.opacity = '0.4';
+                }
+                
+                ticksGroup.appendChild(line);
+            }
+            
+            return ticksGroup;
+        }
+        
+        // Theme switcher function
+        function changeTheme(theme) {
+            if (theme === '') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+            }
+        }
+        
+        // Add tick marks to all clocks on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add tick marks to all clock SVGs
+            const clocks = document.querySelectorAll('.clock-svg');
+            clocks.forEach(svg => {
+                // Add hour ticks (12 marks) - outside the outer ring (145 + 2)
+                const hourTicks = createTicks(svg, 150, 150, 147, 12, 10, true);
+                svg.insertBefore(hourTicks, svg.firstChild);
+                
+                // Add minute ticks (60 marks) - outside the middle ring (110 + 2)
+                const minuteTicks = createTicks(svg, 150, 150, 112, 60, 6, false);
+                svg.insertBefore(minuteTicks, svg.firstChild);
+                
+                // Add second ticks (60 marks) - outside the inner ring (75 + 2)
+                const secondTicks = createTicks(svg, 150, 150, 77, 60, 6, false);
+                svg.insertBefore(secondTicks, svg.firstChild);
+            });
+            
+            // Initialize the clocks
+            const clock1 = new CircularClock('clock1', 10, 25, 45);
+            const clock2 = new CircularClock('clock2', 3, 15, 30);
+            const clock3 = new CircularClock('clock3', 18, 45, 0);
+        });
+
+        // Clock class
+        class CircularClock {
+            constructor(id, initialHours, initialMinutes, initialSeconds) {
+                this.id = id;
+                this.hours = initialHours;
+                this.minutes = initialMinutes;
+                this.seconds = initialSeconds;
+                
+                this.container = document.getElementById(id);
+                this.timeDisplay = document.getElementById('time' + id.slice(-1));
+                this.svg = this.container.querySelector('.clock-svg');
+                
+                // Get border rings (they come first in the DOM)
+                const borderRings = this.svg.querySelectorAll('.clock-ring-border');
+                this.hoursBorderRing = borderRings[0];
+                this.minutesBorderRing = borderRings[1];
+                this.secondsBorderRing = borderRings[2];
+                
+                // Get ring elements (using querySelectorAll and index)
+                const rings = this.svg.querySelectorAll('.clock-ring');
+                this.hoursRing = rings[0];
+                this.minutesRing = rings[1];
+                this.secondsRing = rings[2];
+                
+                // Get dot elements
+                const dots = this.svg.querySelectorAll('.clock-dot');
+                this.hoursDot = dots[0];
+                this.minutesDot = dots[1];
+                this.secondsDot = dots[2];
+                
+                // Calculate circumferences
+                this.hoursCircumference = 2 * Math.PI * 135;
+                this.minutesCircumference = 2 * Math.PI * 100;
+                this.secondsCircumference = 2 * Math.PI * 65;
+                
+                // Start the clock
+                this.update();
+                this.start();
+            }
+            
+            start() {
+                setInterval(() => this.tick(), 1000);
+            }
+            
+            tick() {
+                this.seconds++;
+                
+                if (this.seconds >= 60) {
+                    this.seconds = 0;
+                    this.minutes++;
+                }
+                
+                if (this.minutes >= 60) {
+                    this.minutes = 0;
+                    this.hours++;
+                }
+                
+                if (this.hours >= 24) {
+                    this.hours = 0;
+                }
+                
+                this.update();
+            }
+            
+            update() {
+                // Update digital display
+                this.timeDisplay.textContent = 
+                    String(this.hours).padStart(2, '0') + ':' +
+                    String(this.minutes).padStart(2, '0') + ':' +
+                    String(this.seconds).padStart(2, '0');
+                
+                // Calculate percentages
+                const secondsPercentage = (this.seconds / 60) * 100;
+                const minutesPercentage = (this.minutes / 60) * 100;
+                const hoursPercentage = ((this.hours % 12) / 12) * 100;
+                
+                // Update border ring progress (they follow the main rings)
+                this.updateRing(this.hoursBorderRing, this.hoursCircumference, hoursPercentage);
+                this.updateRing(this.minutesBorderRing, this.minutesCircumference, minutesPercentage);
+                this.updateRing(this.secondsBorderRing, this.secondsCircumference, secondsPercentage);
+                
+                // Update main ring progress
+                this.updateRing(this.hoursRing, this.hoursCircumference, hoursPercentage);
+                this.updateRing(this.minutesRing, this.minutesCircumference, minutesPercentage);
+                this.updateRing(this.secondsRing, this.secondsCircumference, secondsPercentage);
+                
+                // Update dot positions
+                this.updateDot(this.hoursDot, hoursPercentage);
+                this.updateDot(this.minutesDot, minutesPercentage);
+                this.updateDot(this.secondsDot, secondsPercentage);
+            }
+            
+            updateRing(ring, circumference, percentage) {
+                const filledLength = (percentage / 100) * circumference;
+                ring.style.strokeDasharray = `${filledLength} ${circumference - filledLength}`;
+            }
+            
+            updateDot(dot, percentage) {
+                const angle = (percentage / 100) * 360;
+                dot.style.transform = `rotate(${angle}deg)`;
+                dot.style.transformOrigin = '150px 150px';
+            }
+        }
+    </script>
+</body>
+</html>

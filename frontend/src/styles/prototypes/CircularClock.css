@@ -1,0 +1,248 @@
+/* Import the central theme colors */
+@import './theme-colors.css';
+
+/* Circular Clock Component Styles - Using Theme Colors */
+
+.circular-clock-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: radial-gradient(
+    circle,
+    var(--theme-background-overlay),
+    var(--theme-background-alt)
+  );
+  border-radius: 50%;
+  box-shadow: 
+    var(--theme-shadow-lg),
+    0 6px 12px rgba(0, 0, 0, 0.08),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.circular-clock {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clock-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(0deg);
+  filter: drop-shadow(var(--theme-shadow-md));
+}
+
+/* Background rings */
+.clock-ring-background {
+  fill: none;
+  stroke: var(--theme-border);
+  stroke-width: 20;
+  opacity: 0.15;
+}
+
+/* Alternative: colored ring backgrounds for more definition */
+.clock-ring-background-hours {
+  fill: none;
+  stroke: var(--clock-color-hours, var(--theme-color1));
+  stroke-width: 20;
+  opacity: 0.1;
+}
+
+.clock-ring-background-minutes {
+  fill: none;
+  stroke: var(--clock-color-minutes, var(--theme-color2));
+  stroke-width: 20;
+  opacity: 0.1;
+}
+
+.clock-ring-background-seconds {
+  fill: none;
+  stroke: var(--clock-color-seconds, var(--theme-color3));
+  stroke-width: 20;
+  opacity: 0.1;
+}
+
+/* Progress rings - Using theme colors */
+.clock-ring {
+  fill: none;
+  stroke-width: 16; /* Slightly smaller to leave room for border */
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+/* Border rings - dark outlines that follow progress */
+.clock-ring-border {
+  fill: none;
+  stroke: #333333;
+  stroke-width: 22; /* Wider than main ring to create border effect */
+  stroke-linecap: round;
+  opacity: 0.8;
+  transition: stroke-dasharray 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Map clock rings to theme colors */
+.clock-ring-hours {
+  stroke: var(--clock-color-hours, var(--theme-color1));
+}
+
+.clock-ring-minutes {
+  stroke: var(--clock-color-minutes, var(--theme-color2));
+}
+
+.clock-ring-seconds {
+  stroke: var(--clock-color-seconds, var(--theme-color3));
+}
+/* End dots - Using theme colors */
+.clock-dot {
+  fill: var(--theme-accent);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clock-dot-hours {
+  fill: var(--clock-color-hours, var(--theme-color1));
+}
+
+.clock-dot-minutes {
+  fill: var(--clock-color-minutes, var(--theme-color2));
+}
+
+.clock-dot-seconds {
+  fill: var(--clock-color-seconds, var(--theme-color3));
+  animation: pulse-dot 1s ease-in-out infinite;
+}
+
+/* Tick marks - Using accent color */
+.clock-ticks {
+  opacity: 0.6;
+}
+
+.clock-tick {
+  stroke: var(--theme-accent);
+  stroke-width: 1;
+  opacity: 0.4;
+}
+
+.clock-tick-major {
+  stroke: var(--theme-accent);
+  stroke-width: 2;
+  opacity: 0.8;
+}
+
+/* Digital display - Using theme colors */
+.clock-digital-display {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  background: var(--theme-background-overlay);
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 
+    var(--theme-shadow-md),
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.clock-time {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', monospace;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--theme-text);
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.clock-labels {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.clock-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+/* Label colors using theme system */
+.clock-label-hours {
+  color: var(--clock-color-hours, var(--theme-color1));
+  background: var(--clock-color-hours-light, var(--theme-color1-light));
+}
+
+.clock-label-minutes {
+  color: var(--clock-color-minutes, var(--theme-color2));
+  background: var(--clock-color-minutes-light, var(--theme-color2-light));
+}
+
+.clock-label-seconds {
+  color: var(--clock-color-seconds, var(--theme-color3));
+  background: var(--clock-color-seconds-light, var(--theme-color3-light));
+}
+
+/* Animations */
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+/* Hover effects */
+.circular-clock:hover .clock-ring {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.circular-clock:hover .clock-digital-display {
+  transform: scale(1.05);
+  box-shadow: 
+    var(--theme-shadow-lg),
+    0 3px 6px rgba(0, 0, 0, 0.08),
+    inset 0 1px 3px rgba(255, 255, 255, 1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .clock-time {
+    font-size: 24px;
+  }
+  
+  .clock-ring {
+    stroke-width: 14;
+  }
+  
+  .clock-ring-border {
+    stroke-width: 18;
+  }
+  
+  .clock-ring-background {
+    stroke-width: 16;
+  }
+}
+
+/* Dark mode support - automatically uses dark theme */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --theme-background: #111827;
+    --theme-background-alt: #1f2937;
+    --theme-background-overlay: rgba(31, 41, 55, 0.95);
+    --theme-text: #f9fafb;
+    --theme-text-secondary: #9ca3af;
+    --theme-border: #374151;
+  }
+}

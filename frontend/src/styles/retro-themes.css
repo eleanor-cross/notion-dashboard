@@ -1,0 +1,368 @@
+/* ========================================
+   RETRO VAPORWAVE THEME SYSTEM
+   Based on nostalgic desktop interfaces
+======================================== */
+
+/* Theme 1: Classic Vaporwave Pink */
+[data-theme="vaporwave-pink"] {
+  /* Core Colors */
+  --color-background: #ff6b9d;
+  --color-text: #2a0845;
+  --color-1: #c44569;
+  --color-2: #f8b500;
+  --color-3: #00d2d3;
+  
+  /* Window Colors */
+  --window-bg: rgba(255, 255, 255, 0.9);
+  --window-header: #2a0845;
+  --window-border: #2a0845;
+  --window-shadow: rgba(42, 8, 69, 0.3);
+  
+  /* Interface Elements */
+  --button-bg: var(--color-2);
+  --button-text: var(--color-text);
+  --button-hover: #e6a400;
+  --input-bg: rgba(255, 255, 255, 0.8);
+  --accent-glow: var(--color-3);
+}
+
+/* Theme 2: Synthwave Purple */
+[data-theme="synthwave-purple"] {
+  /* Core Colors */
+  --color-background: #6c5ce7;
+  --color-text: #fdcb6e;
+  --color-1: #a29bfe;
+  --color-2: #fd79a8;
+  --color-3: #00b894;
+  
+  /* Window Colors */
+  --window-bg: rgba(26, 20, 100, 0.85);
+  --window-header: #2d3436;
+  --window-border: #fdcb6e;
+  --window-shadow: rgba(0, 0, 0, 0.4);
+  
+  /* Interface Elements */
+  --button-bg: var(--color-2);
+  --button-text: #2d3436;
+  --button-hover: #e84393;
+  --input-bg: rgba(162, 155, 254, 0.3);
+  --accent-glow: var(--color-3);
+}
+
+/* Theme 3: Cyber Mint */
+[data-theme="cyber-mint"] {
+  /* Core Colors */
+  --color-background: #00b894;
+  --color-text: #2d3436;
+  --color-1: #55efc4;
+  --color-2: #81ecec;
+  --color-3: #fd79a8;
+  
+  /* Window Colors */
+  --window-bg: rgba(255, 255, 255, 0.9);
+  --window-header: #2d3436;
+  --window-border: #2d3436;
+  --window-shadow: rgba(45, 52, 54, 0.3);
+  
+  /* Interface Elements */
+  --button-bg: var(--color-3);
+  --button-text: #2d3436;
+  --button-hover: #e84393;
+  --input-bg: rgba(85, 239, 196, 0.2);
+  --accent-glow: var(--color-1);
+}
+
+/* Theme 4: Sunset Orange */
+[data-theme="sunset-orange"] {
+  /* Core Colors */
+  --color-background: #fab1a0;
+  --color-text: #2d3436;
+  --color-1: #e17055;
+  --color-2: #fdcb6e;
+  --color-3: #6c5ce7;
+  
+  /* Window Colors */
+  --window-bg: rgba(255, 255, 255, 0.9);
+  --window-header: #2d3436;
+  --window-border: #2d3436;
+  --window-shadow: rgba(45, 52, 54, 0.3);
+  
+  /* Interface Elements */
+  --button-bg: var(--color-3);
+  --button-text: white;
+  --button-hover: #5f3dc4;
+  --input-bg: rgba(253, 203, 110, 0.3);
+  --accent-glow: var(--color-2);
+}
+
+/* Theme 5: Arctic Blue */
+[data-theme="arctic-blue"] {
+  /* Core Colors */
+  --color-background: #74b9ff;
+  --color-text: #2d3436;
+  --color-1: #0984e3;
+  --color-2: #00cec9;
+  --color-3: #fd79a8;
+  
+  /* Window Colors */
+  --window-bg: rgba(255, 255, 255, 0.9);
+  --window-header: #2d3436;
+  --window-border: #2d3436;
+  --window-shadow: rgba(45, 52, 54, 0.3);
+  
+  /* Interface Elements */
+  --button-bg: var(--color-3);
+  --button-text: #2d3436;
+  --button-hover: #e84393;
+  --input-bg: rgba(0, 206, 201, 0.2);
+  --accent-glow: var(--color-2);
+}
+
+/* ========================================
+   RETRO WINDOW SYSTEM
+======================================== */
+
+/* Base window styling */
+.retro-window {
+  background: var(--window-bg);
+  border: 3px solid var(--window-border);
+  box-shadow: 
+    5px 5px 0px var(--window-shadow),
+    inset 1px 1px 0px rgba(255, 255, 255, 0.3);
+  position: relative;
+  margin: 20px;
+  min-width: 300px;
+  backdrop-filter: blur(2px);
+}
+
+/* Window header/title bar */
+.retro-window-header {
+  background: var(--window-header);
+  color: var(--window-bg);
+  padding: 8px 12px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--window-border);
+}
+
+/* Window controls */
+.retro-window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.retro-control-btn {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--window-bg);
+  background: var(--window-header);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--window-bg);
+  font-weight: bold;
+}
+
+.retro-control-btn:hover {
+  background: var(--accent-glow);
+  color: var(--window-header);
+}
+
+/* Window content area */
+.retro-window-content {
+  padding: 20px;
+  font-family: 'Courier New', monospace;
+  color: var(--color-text);
+  min-height: 200px;
+}
+
+/* ========================================
+   RETRO COMPONENTS
+======================================== */
+
+/* Retro buttons */
+.retro-btn {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: 3px solid var(--window-border);
+  padding: 8px 16px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 
+    3px 3px 0px var(--window-shadow),
+    inset 1px 1px 0px rgba(255, 255, 255, 0.3);
+  transition: all 0.1s ease;
+}
+
+.retro-btn:hover {
+  background: var(--button-hover);
+  transform: translate(1px, 1px);
+  box-shadow: 
+    2px 2px 0px var(--window-shadow),
+    inset 1px 1px 0px rgba(255, 255, 255, 0.3);
+}
+
+.retro-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: inset 1px 1px 0px rgba(0, 0, 0, 0.2);
+}
+
+/* Retro inputs */
+.retro-input {
+  background: var(--input-bg);
+  border: 2px inset var(--window-border);
+  padding: 8px 12px;
+  font-family: 'Courier New', monospace;
+  color: var(--color-text);
+  width: 100%;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.retro-input:focus {
+  outline: none;
+  border-color: var(--accent-glow);
+  box-shadow: 
+    inset 2px 2px 4px rgba(0, 0, 0, 0.2),
+    0 0 8px var(--accent-glow);
+}
+
+/* Retro text styling */
+.retro-text {
+  font-family: 'Courier New', monospace;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.retro-text-large {
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+/* Retro progress bars */
+.retro-progress {
+  width: 100%;
+  height: 24px;
+  background: var(--input-bg);
+  border: 2px inset var(--window-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.retro-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-2), var(--accent-glow));
+  border-right: 2px solid var(--window-border);
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.retro-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 4px,
+    rgba(255, 255, 255, 0.2) 4px,
+    rgba(255, 255, 255, 0.2) 8px
+  );
+}
+
+/* ========================================
+   LAYOUT HELPERS
+======================================== */
+
+/* Desktop background */
+.retro-desktop {
+  min-height: 100vh;
+  background: var(--color-background);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grid pattern overlay */
+.retro-desktop::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+/* Window stacking */
+.retro-desktop .retro-window {
+  z-index: 10;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .retro-window {
+    margin: 10px;
+    min-width: 250px;
+  }
+  
+  .retro-window-content {
+    padding: 15px;
+  }
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+
+@keyframes retro-glow {
+  0%, 100% { 
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+  50% { 
+    box-shadow: 0 0 16px var(--accent-glow), 0 0 24px var(--accent-glow);
+  }
+}
+
+.retro-glow {
+  animation: retro-glow 2s ease-in-out infinite;
+}
+
+@keyframes retro-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+.retro-blink {
+  animation: retro-blink 1s infinite;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .retro-glow,
+  .retro-blink {
+    animation: none;
+  }
+  
+  .retro-btn {
+    transition: none;
+  }
+}

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock with Bold Ring Outlines</title>
+    <link rel="stylesheet" href="theme-colors.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h1 {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: white;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .clock-demo {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Clock specific styles */
+        .circular-clock-container {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            background: radial-gradient(
+                circle,
+                rgba(255, 255, 255, 0.95),
+                rgba(249, 250, 251, 0.9)
+            );
+            border-radius: 50%;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                inset 0 -3px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .clock-svg {
+            position: absolute;
+        }
+
+        /* Colored background rings */
+        .clock-ring-background-hours {
+            fill: none;
+            stroke: var(--theme-color1);
+            stroke-width: 25;
+            opacity: 0.1;
+        }
+
+        .clock-ring-background-minutes {
+            fill: none;
+            stroke: var(--theme-color2);
+            stroke-width: 25;
+            opacity: 0.1;
+        }
+
+        .clock-ring-background-seconds {
+            fill: none;
+            stroke: var(--theme-color3);
+            stroke-width: 25;
+            opacity: 0.1;
+        }
+
+        /* Bold outlines */
+        .clock-ring-outline {
+            fill: none;
+            stroke-width: 2;
+            opacity: 0.5;
+        }
+
+        /* Progress rings */
+        .clock-ring {
+            fill: none;
+            stroke-width: 25;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .clock-ring-hours { stroke: var(--theme-color1); }
+        .clock-ring-minutes { stroke: var(--theme-color2); }
+        .clock-ring-seconds { stroke: var(--theme-color3); }
+
+        /* Tick marks */
+        .clock-tick {
+            stroke: var(--theme-accent);
+            stroke-width: 1;
+            opacity: 0.3;
+        }
+
+        .clock-tick-major {
+            stroke: var(--theme-accent);
+            stroke-width: 3;
+            opacity: 0.6;
+        }
+
+        .clock-dot-hours { fill: var(--theme-color1); }
+        .clock-dot-minutes { fill: var(--theme-color2); }
+        .clock-dot-seconds { fill: var(--theme-color3); }
+
+        .clock-digital-display {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            background: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .clock-time {
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--theme-text);
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Clock with Bold Ring Outlines</h1>
+    <p>Each ring has colored backgrounds and bold outlines for definition</p>
+    
+    <div class="clock-demo">
+        <div class="circular-clock-container" id="clock1">
+            <svg width="400" height="400" class="clock-svg">
+                <!-- Tick marks (added via JS) -->
+                
+                <!-- Background rings with colors -->
+                <circle cx="200" cy="200" r="180" class="clock-ring-background-hours"/>
+                <circle cx="200" cy="200" r="140" class="clock-ring-background-minutes"/>
+                <circle cx="200" cy="200" r="100" class="clock-ring-background-seconds"/>
+                
+                <!-- Bold outlines AROUND the rings (not through center) -->
+                <!-- Outer ring (radius 180, width 25) extends from 167.5 to 192.5 -->
+                <circle cx="200" cy="200" r="192.5" class="clock-ring-outline" 
+                        stroke="var(--theme-color1)" stroke-width="2" opacity="0.5"/>
+                <circle cx="200" cy="200" r="167.5" class="clock-ring-outline" 
+                        stroke="var(--theme-color1)" stroke-width="2" opacity="0.5"/>
+                
+                <!-- Middle ring (radius 140, width 25) extends from 127.5 to 152.5 -->
+                <circle cx="200" cy="200" r="152.5" class="clock-ring-outline" 
+                        stroke="var(--theme-color2)" stroke-width="2" opacity="0.5"/>
+                <circle cx="200" cy="200" r="127.5" class="clock-ring-outline" 
+                        stroke="var(--theme-color2)" stroke-width="2" opacity="0.5"/>
+                
+                <!-- Inner ring (radius 100, width 25) extends from 87.5 to 112.5 -->
+                <circle cx="200" cy="200" r="112.5" class="clock-ring-outline" 
+                        stroke="var(--theme-color3)" stroke-width="2" opacity="0.5"/>
+                <circle cx="200" cy="200" r="87.5" class="clock-ring-outline" 
+                        stroke="var(--theme-color3)" stroke-width="2" opacity="0.5"/>
+                
+                <!-- Progress rings -->
+                <circle cx="200" cy="200" r="180" class="clock-ring clock-ring-hours" 
+                        stroke-dasharray="353.43 776.54" transform="rotate(-90 200 200)"/>
+                <circle cx="200" cy="200" r="140" class="clock-ring clock-ring-minutes" 
+                        stroke-dasharray="219.91 659.74" transform="rotate(-90 200 200)"/>
+                <circle cx="200" cy="200" r="100" class="clock-ring clock-ring-seconds" 
+                        stroke-dasharray="314.16 314.16" transform="rotate(-90 200 200)"/>
+                
+                <!-- End dots -->
+                <circle cx="200" cy="20" r="8" class="clock-dot-hours"/>
+                <circle cx="200" cy="60" r="7" class="clock-dot-minutes"/>
+                <circle cx="200" cy="100" r="6" class="clock-dot-seconds"/>
+            </svg>
+            
+            <div class="clock-digital-display">
+                <div class="clock-time">10:25:30</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add tick marks
+        document.addEventListener('DOMContentLoaded', function() {
+            const svg = document.querySelector('.clock-svg');
+            
+            // Create tick marks
+            function createTicks(cx, cy, radius, count, length, isMajor) {
+                const ticksGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                
+                for (let i = 0; i < count; i++) {
+                    const angle = (i * 360) / count - 90;
+                    const angleRad = (angle * Math.PI) / 180;
+                    
+                    const x1 = cx + (radius - length) * Math.cos(angleRad);
+                    const y1 = cy + (radius - length) * Math.sin(angleRad);
+                    const x2 = cx + radius * Math.cos(angleRad);
+                    const y2 = cy + radius * Math.sin(angleRad);
+                    
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', x1);
+                    line.setAttribute('y1', y1);
+                    line.setAttribute('x2', x2);
+                    line.setAttribute('y2', y2);
+                    
+                    const isHourMark = isMajor && i % 3 === 0;
+                    line.setAttribute('class', isHourMark ? 'clock-tick-major' : 'clock-tick');
+                    
+                    ticksGroup.appendChild(line);
+                }
+                
+                return ticksGroup;
+            }
+            
+            // Add ticks - positioned outside the ring borders
+            svg.insertBefore(createTicks(200, 200, 195, 12, 10, true), svg.firstChild);  // Hour ticks
+            svg.insertBefore(createTicks(200, 200, 155, 60, 7, false), svg.firstChild);  // Minute ticks
+            svg.insertBefore(createTicks(200, 200, 115, 60, 7, false), svg.firstChild);  // Second ticks
+        });
+    </script>
+</body>
+</html>
